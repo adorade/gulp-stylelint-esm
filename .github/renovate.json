@@ -1,0 +1,11 @@
+{
+  "extends": [
+    "config:base",
+    ":dependencyDashboardApproval",
+    "schedule:earlyMondays",
+    ":assignAndReview(adorade)",
+    ":maintainLockFilesMonthly"
+  ],
+  "timezone": "Europe/Bucharest",
+  "labels": ["deps"]
+}
