@@ -50,7 +50,7 @@
     "gulp-clean-css": "4.3.0",
     "gulp-concat": "2.6.1",
     "gulp-rename": "2.0.0",
-    "sinon": "15.0.1",
+    "sinon": "17.0.1",
     "stylelint": "15.11.0",
     "tape": "5.7.2"
   },
