@@ -2,21 +2,22 @@ name: Test CI
 
 on:
   push:
-    branches: main
+    branches: [main, develop]
   pull_request:
-    branches: develop
+    branches: [main]
 
 jobs:
   test:
     name: Test on Node.js ${{ matrix.node }} and ${{ matrix.os }}
-    runs-on: ${{ matrix.os }}
 
     strategy:
       fail-fast: false
       matrix:
         os: [ubuntu-latest]
-        node: [14, 16, 18]
+        node: [14, 16, 18, 20]
         # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
+
+    runs-on: ${{ matrix.os }}
 
     steps:
       - name: Checkout the repo
