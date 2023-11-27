@@ -42,8 +42,8 @@
     "source-map": "0.7.4"
   },
   "devDependencies": {
-    "@babel/core": "7.21.0",
-    "@babel/eslint-parser": "7.19.1",
+    "@babel/core": "7.23.3",
+    "@babel/eslint-parser": "7.23.3",
     "eslint": "8.35.0",
     "eslint-config-stylelint": "18.0.0",
     "gulp": "4.0.2",
