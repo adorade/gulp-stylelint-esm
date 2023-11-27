@@ -1,6 +1,8 @@
-/**
- * src/index.js
- */
+/*!
+ * Gulp Stylelint (v1.1.0): src/index.js
+ * Copyright (c) 2023 Adorade (https://github.com/adorade/gulp-stylelint-esm)
+ * License under MIT
+ * ========================================================================== */
 
 import PluginError from 'plugin-error';
 import stylelint from 'stylelint';

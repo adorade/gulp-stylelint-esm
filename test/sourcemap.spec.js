@@ -1,6 +1,8 @@
-/**
- * test/sourcemap.spec.js
- */
+/*!
+ * Gulp Stylelint (v1.1.0): test/sourcemap.spec.js
+ * Copyright (c) 2023 Adorade (https://github.com/adorade/gulp-stylelint-esm)
+ * License under MIT
+ * ========================================================================== */
 
 import gulp from 'gulp';
 import gulpCleanCss from 'gulp-clean-css';

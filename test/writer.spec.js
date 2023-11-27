@@ -1,6 +1,8 @@
-/**
- * test/writer.spec.js
- */
+/*!
+ * Gulp Stylelint (v1.1.0): test/writer.spec.js
+ * Copyright (c) 2023 Adorade (https://github.com/adorade/gulp-stylelint-esm)
+ * License under MIT
+ * ========================================================================== */
 
 import ansiColors from 'ansi-colors';
 import { stub } from 'sinon';
