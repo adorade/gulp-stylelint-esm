@@ -7,5 +7,32 @@
     ":maintainLockFilesMonthly"
   ],
   "timezone": "Europe/Bucharest",
-  "labels": ["deps"]
+  "labels": ["deps"],
+  "packageRules": [
+    {
+      "matchPackagePatterns": ["^@babel/"],
+      "groupName": "babel packages",
+      "labels": ["build"]
+    },
+    {
+      "matchPackagePatterns": ["^eslint"],
+      "groupName": "eslint packages",
+      "labels": ["lint"]
+    },
+    {
+      "matchPackagePatterns": ["^stylelint"],
+      "groupName": "stylelint packages",
+      "labels": ["lint"]
+    },
+    {
+      "matchPackagePatterns": ["^sinon|^tape"],
+      "groupName": "test packages",
+      "labels": ["test"]
+    },
+    {
+      "matchPackagePatterns": ["^gulp"],
+      "groupName": "gulp packages",
+      "labels": ["gulp"]
+    }
+  ]
 }
