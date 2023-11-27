@@ -45,7 +45,7 @@
     "@babel/core": "7.23.3",
     "@babel/eslint-parser": "7.23.3",
     "eslint": "8.54.0",
-    "eslint-config-stylelint": "18.0.0",
+    "eslint-config-stylelint": "20.0.0",
     "gulp": "4.0.2",
     "gulp-clean-css": "4.3.0",
     "gulp-concat": "2.6.1",
