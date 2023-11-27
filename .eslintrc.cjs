@@ -15,6 +15,7 @@ module.exports = {
         sourceType: 'module',
     },
     rules: {
-        'prefer-object-spread': 'off'
+        'prefer-object-spread': 'off',
+        'n/prefer-global/process': ['error', 'always']
     }
 }
