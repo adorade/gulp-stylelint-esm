@@ -1,6 +1,8 @@
-/**
- * src/writer.js
- */
+/*!
+ * Gulp Stylelint (v1.1.0): src/writer.js
+ * Copyright (c) 2023 Adorade (https://github.com/adorade/gulp-stylelint-esm)
+ * License under MIT
+ * ========================================================================== */
 
 import ansiColors from 'ansi-colors';
 import fs from 'node:fs';

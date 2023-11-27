@@ -1,6 +1,8 @@
-/**
- * src/reporter-factory.js
- */
+/*!
+ * Gulp Stylelint (v1.1.0): src/reporter-factory.js
+ * Copyright (c) 2023 Adorade (https://github.com/adorade/gulp-stylelint-esm)
+ * License under MIT
+ * ========================================================================== */
 
 import fancyLog from 'fancy-log';
 import stylelint from 'stylelint';
