@@ -1,5 +1,5 @@
 /*!
- * Gulp Stylelint (v1.1.0): test/writer.spec.js
+ * Gulp Stylelint (v2.0.0-dev): test/writer.spec.js
  * Copyright (c) 2023 Adorade (https://github.com/adorade/gulp-stylelint-esm)
  * License under MIT
  * ========================================================================== */
@@ -12,7 +12,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import url from 'node:url';
 
-import writer from '../src/writer.js';
+import { writer } from '../src/writer.mjs';
 
 const __dirname = url.fileURLToPath(new URL('.', import.meta.url));
 const tmpDir = path.resolve(__dirname, '../tmp');
@@ -39,6 +39,7 @@ test('writer should write to cwd if base dir is not specified', t => {
     .then(() => {
       process.cwd.restore();
       fs.unlinkSync(reportFilePath);
+      fs.rmdirSync(tmpDir);
     });
 });
 
@@ -89,5 +90,6 @@ test('writer should strip colors from formatted output', t => {
     .then(() => {
       process.cwd.restore();
       fs.unlinkSync(reportFilePath);
+      fs.rmdirSync(tmpDir);
     });
 });

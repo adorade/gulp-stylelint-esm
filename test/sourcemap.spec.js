@@ -1,5 +1,5 @@
 /*!
- * Gulp Stylelint (v1.1.0): test/sourcemap.spec.js
+ * Gulp Stylelint (v2.0.0-dev): test/sourcemap.spec.js
  * Copyright (c) 2023 Adorade (https://github.com/adorade/gulp-stylelint-esm)
  * License under MIT
  * ========================================================================== */
@@ -13,7 +13,7 @@ import test from 'tape';
 import path from 'node:path';
 import url from 'node:url';
 
-import gStylelintEsm from '../src/index.js';
+import gStylelintEsm from '../src/index.mjs';
 
 const __dirname = url.fileURLToPath(new URL('.', import.meta.url));
 
@@ -99,8 +99,8 @@ test('should ignore empty sourcemaps', t => {
           t.deepEqual(
             lintResult.map(r => r.source),
             [
-              path.join(__dirname, 'fixtures', 'original-a.css'),
-              path.join(__dirname, 'fixtures', 'original-b.css')
+              fixtures('original-a.css'),
+              fixtures('original-b.css')
             ],
             'there are two files'
           );

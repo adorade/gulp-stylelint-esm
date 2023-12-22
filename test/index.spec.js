@@ -1,5 +1,5 @@
 /*!
- * Gulp Stylelint (v1.1.0): test/index.spec.js
+ * Gulp Stylelint (v2.0.0-dev): test/index.spec.js
  * Copyright (c) 2023 Adorade (https://github.com/adorade/gulp-stylelint-esm)
  * License under MIT
  * ========================================================================== */
@@ -11,7 +11,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import url from 'node:url';
 
-import gStylelintEsm from '../src/index.js';
+import gStylelintEsm from '../src/index.mjs';
 
 const __dirname = url.fileURLToPath(new URL('.', import.meta.url));
 
@@ -47,7 +47,9 @@ test('should NOT emit an error when configuration is set', t => {
   t.plan(1);
   gulp
     .src(fixtures('basic.css'))
-    .pipe(gStylelintEsm({config: {rules: []}}))
+    .pipe(gStylelintEsm({
+      config: {rules: {}},
+    }))
     .on('error', () => t.fail('error has been emitted'))
     .on('finish', () => t.pass('no error emitted'));
 });
@@ -56,9 +58,9 @@ test('should emit an error when linter complains', t => {
   t.plan(1);
   gulp
     .src(fixtures('invalid.css'))
-    .pipe(gStylelintEsm({config: {rules: {
-      'color-hex-case': 'lower'
-    }}}))
+    .pipe(gStylelintEsm({
+      config: {rules: {'color-hex-length': 'short'}},
+    }))
     .on('error', () => t.pass('error has been emitted correctly'));
 });
 
@@ -67,13 +69,15 @@ test('should ignore file', t => {
   gulp
     .src([fixtures('basic.css'), fixtures('invalid.css')])
     .pipe(gStylelintEsm({
-      config: {rules: {'color-hex-case': 'lower'}},
+      config: {rules: {'color-hex-length': 'short'}},
       ignorePath: fixtures('ignore')
     }))
     .on('finish', () => t.pass('no error emitted'));
 });
 
 test('should fix the file without emitting errors', t => {
+  const tmpDir = path.resolve(__dirname, '../tmp');
+
   t.plan(2);
   gulp
     .src(fixtures('invalid.css'), {
@@ -81,27 +85,18 @@ test('should fix the file without emitting errors', t => {
     })
     .pipe(gStylelintEsm({
       fix: true,
-      config: {rules: {'color-hex-case': 'lower'}}
+      config: {rules: {'color-hex-length': 'short'}}
     }))
-    .pipe(gulp.dest(path.resolve(__dirname, '../tmp')))
+    .pipe(gulp.dest(tmpDir))
     .on('error', error => t.fail(`error ${error} has been emitted`))
     .on('finish', () => {
       t.equal(
-        fs.readFileSync(path.resolve(__dirname, '../tmp/invalid.css'), 'utf8'),
+        fs.readFileSync(`${tmpDir}/invalid.css`, 'utf8'),
         '.foo {\n  color: #fff;\n}\n',
         'report file has fixed contents'
       );
       t.pass('no error emitted');
+      fs.unlinkSync(`${tmpDir}/invalid.css`);
+      fs.rmdirSync(tmpDir);
     });
-});
-
-test('should expose an object with stylelint formatter functions', t => {
-  t.plan(2);
-  t.equal(typeof gStylelintEsm.formatters, 'object', 'formatters property is an object');
-
-  const gFormatters = Object
-    .keys(gStylelintEsm.formatters)
-    .map(fName => gStylelintEsm.formatters[fName]);
-
-  t.true(gFormatters.every(f => typeof f === 'function'), 'all formatters are functions');
 });
