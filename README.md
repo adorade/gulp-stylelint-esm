@@ -1,6 +1,6 @@
 # Gulp Stylelint
 
-[![NPM version](http://img.shields.io/npm/v/gulp-stylelint-esm?logo=npm)](https://www.npmjs.org/package/gulp-stylelint-esm)
+[![NPM version](https://img.shields.io/npm/v/gulp-stylelint-esm?logo=npm)](https://www.npmjs.org/package/gulp-stylelint-esm)
 [![GitHub package.json version](https://img.shields.io/github/package-json/v/adorade/gulp-stylelint-esm?color=green&logo=github)](https://github.com/adorade/gulp-stylelint-esm/blob/main/package.json)
 [![license](https://img.shields.io/github/license/adorade/gulp-stylelint-esm)](https://mit-license.org)
 [![Depfu Status](https://img.shields.io/depfu/dependencies/github/adorade/gulp-stylelint-esm)](https://depfu.com/repos/github/adorade/gulp-stylelint-esm)
@@ -9,7 +9,7 @@
 
 This package is pure ESM. Please [read this](https://gist.github.com/sindresorhus/a39789f98801d908bbc7ff3ecc99d99c).
 
-A [Gulp](http://gulpjs.com/) plugin that runs [stylelint](https://github.com/stylelint/stylelint) results through a list of reporters with ESM support.
+A [Gulp](https://gulpjs.com/) plugin that runs [stylelint](https://github.com/stylelint/stylelint) results through a list of reporters with ESM support.
 
 ## Installation
 
@@ -24,7 +24,7 @@ npm install stylelint gulp-stylelint-esm --save-dev
 
 ## Quick start
 
-Once you have [configured stylelint](http://stylelint.io/user-guide/configuration/) (e.g. you have a _.stylelintrc_ file), start with the following code. You will find additional configuration [options](#options) below.
+Once you have [configured stylelint](https://stylelint.io/user-guide/configuration/) (e.g. you have a _.stylelintrc_ file), start with the following code. You will find additional configuration [options](#options) below.
 
 ```js
 import gulp from 'gulp';
