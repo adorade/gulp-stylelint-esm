@@ -18,8 +18,8 @@
     "/src/*.js"
   ],
   "keywords": [
-    "gulp",
-    "plugin",
+    "gulpplugin",
+    "gulpfriendly",
     "stylelint",
     "postcss",
     "css",
