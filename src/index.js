@@ -1,5 +1,5 @@
 /*!
- * Gulp Stylelint (v1.1.0): src/index.js
+ * Gulp Stylelint (v1.1.1): src/index.js
  * Copyright (c) 2023 Adorade (https://github.com/adorade/gulp-stylelint-esm)
  * License under MIT
  * ========================================================================== */
