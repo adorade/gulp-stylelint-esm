@@ -1,6 +1,6 @@
 # Gulp Stylelint
 
-[![NPM version](http://img.shields.io/npm/v/gulp-stylelint-esm?logo=npm)](https://www.npmjs.org/package/gulp-stylelint-esm)
+[![NPM version](https://img.shields.io/npm/v/gulp-stylelint-esm?logo=npm)](https://www.npmjs.org/package/gulp-stylelint-esm)
 [![GitHub package.json version](https://img.shields.io/github/package-json/v/adorade/gulp-stylelint-esm?color=green&logo=github)](https://github.com/adorade/gulp-stylelint-esm/blob/main/package.json)
 [![license](https://img.shields.io/github/license/adorade/gulp-stylelint-esm)](https://mit-license.org)
 [![Depfu Status](https://img.shields.io/depfu/dependencies/github/adorade/gulp-stylelint-esm)](https://depfu.com/repos/github/adorade/gulp-stylelint-esm)
@@ -9,9 +9,11 @@
 
 This package is pure ESM. Please [read this](https://gist.github.com/sindresorhus/a39789f98801d908bbc7ff3ecc99d99c).
 
-A [Gulp](http://gulpjs.com/) plugin that runs [stylelint](https://github.com/stylelint/stylelint) results through a list of reporters.
+A [Gulp](https://gulpjs.com/) plugin that runs [stylelint](https://github.com/stylelint/stylelint) results through a list of reporters with ESM support.
 
 ## Installation
+
+> **REQUIREMENTS**: Supports **stylelint > 16** and **node >= 18.12.0**.
 
 ```sh
 # YARN
@@ -22,7 +24,7 @@ npm install stylelint gulp-stylelint-esm --save-dev
 
 ## Quick start
 
-Once you have [configured stylelint](http://stylelint.io/user-guide/configuration/) (e.g. you have a _.stylelintrc_ file), start with the following code. You will find additional configuration [options](#options) below.
+Once you have [configured stylelint](https://stylelint.io/user-guide/configuration/) (e.g. you have a _.stylelintrc_ file), start with the following code. You will find additional configuration [options](#options) below.
 
 ```js
 import gulp from 'gulp';
@@ -33,7 +35,7 @@ function lintCssTask() {
     .src('src/**/*.css')
     .pipe(gStylelintEsm({
       reporters: [
-        {formatter: 'string', console: true}
+        { formatter: 'string', console: true }
       ]
     }));
 }
@@ -41,15 +43,19 @@ function lintCssTask() {
 
 ## Formatters
 
-Below is the list of currently available stylelint formatters. Some of them are bundled with stylelint by default and exposed on `gStylelintEsm.formatters` object. Others need to be installed. You can [write a custom formatter](http://stylelint.io/developer-guide/formatters/) to tailor the reporting to your needs.
+Below is the list of currently available **stylelint formatters**. Some of them are bundled with stylelint by default and exposed on `gStylelintEsm.formatters` object. Others need to be installed. You can [write a custom formatter](http://stylelint.io/developer-guide/formatters/) to tailor the reporting to your needs.
 
-- `"string"` (same as `gStylelintEsm.formatters.string`) – bundled with stylelint
-- `"verbose"` (same as `gStylelintEsm.formatters.verbose`) – bundled with stylelint
-- `"json"` (same as `gStylelintEsm.formatters.json`) – bundled with stylelint
+Formatters bundled with stylelint: `"compact"`, `"github"`, `"json"`, `"string (default)"`, `"tap"`, `"unix"`, `"verbose"`.
 
 ## Options
 
-**gulp-stylelint-esm** supports all [stylelint options](http://stylelint.io/user-guide/node-api/#options) except [`files`](http://stylelint.io/user-guide/node-api/#files) and [`formatter`](http://stylelint.io/user-guide/node-api/#formatter) and accepts a custom set of options listed below:
+**gulp-stylelint-esm** supports all [stylelint](https://stylelint.io/user-guide/options) and [Node.js API](https://stylelint.io/user-guide/node-api#options) options except:
+
+- [`files`](http://stylelint.io/user-guide/node-api/#files), code will be provided by gulp instead
+- [`formatter`](https://stylelint.io/user-guide/options#formatter), formatters are defined in the `reporters` option
+- [`cache`](https://stylelint.io/user-guide/options#cache), gulp caching should be used instead
+
+and accepts a **custom set of options** listed below:
 
 ```js
 import gulp from 'gulp';
@@ -63,9 +69,9 @@ function lintCssTask() {
       failAfterError: true,
       reportOutputDir: 'reports/lint',
       reporters: [
-        {formatter: 'verbose', console: true},
-        {formatter: 'json', save: 'report.json'},
-        {formatter: myStylelintFormatter, save: 'my-custom-report.txt'}
+        { formatter: 'verbose', console: true },
+        { formatter: 'json', save: 'report.json' },
+        { formatter: myStylelintFormatter, save: 'my-custom-report.txt' }
       ],
       debug: true
     }));
@@ -78,17 +84,18 @@ When set to `true`, the process will end with non-zero error code if any error-l
 
 ### `reportOutputDir`
 
-Base directory for lint results written to filesystem. Defaults to current working directory.
+Base directory for lint results written to filesystem. Defaults to **current working directory** `process.cwd()`.
 
 ### `reporters`
 
-List of reporter configuration objects (see below). Defaults to an empty array.
+List of reporter configuration objects (see below). Defaults to **an empty array** `[]`.
 
 ```js
 {
   // stylelint results formatter (required):
   // - pass a function for imported, custom or exposed formatters
-  // - pass a string ("string", "verbose", "json") for formatters bundled with stylelint
+  // - pass a string for formatters bundled with stylelint
+  //   "string (default)", "compact", "github", "json", "tap", "unix", "verbose"
   formatter: myFormatter,
 
   // save the formatted result to a file (optional):

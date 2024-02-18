@@ -1,7 +1,7 @@
 # https://git-scm.com/docs/gitignore
 # Folders to ignore
 node_modules
-.nvmrc
+archive
 
 # To do Tasks
 .todo
@@ -15,6 +15,7 @@ logs
 
 # Temporary files
 tmp
+.coverage
 
 # OS or Editor folders
 ._*
