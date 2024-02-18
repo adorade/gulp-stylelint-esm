@@ -1,49 +1,45 @@
 /*!
- * Gulp Stylelint (v2.0.0-dev): src/reporter-factory.js
- * Copyright (c) 2023 Adorade (https://github.com/adorade/gulp-stylelint-esm)
+ * Gulp Stylelint (v2.0.0-dev): src/reporter-factory.mjs
+ * Copyright (c) 2023-24 Adorade (https://github.com/adorade/gulp-stylelint-esm)
  * License under MIT
  * ========================================================================== */
 
 import fancyLog from 'fancy-log';
-import stylelint from 'stylelint';
-const { formatters } = stylelint;
-
-import { writer } from './writer.mjs';
 
 /**
- * Factory function for creating a stylelint reporter based on the provided configuration and options.
- *
- * @param {Object} config - Configuration options for the reporter.
- * @param {string} [config.formatter] - The formatter to use. Can be a string or a custom formatter function.
- * @param {boolean} [config.console] - Whether to log the formatted text to the console.
- * @param {boolean} [config.save] - Whether to save the formatted text to a file.
- * @param {Object} options - Additional options for the reporter.
- * @param {string} [options.reportOutputDir] - The directory where the report file should be saved.
- * @returns {Function} A function that acts as a stylelint reporter based on the provided configuration.
+ * @typedef {Object} FormatterConfig
+ * @property {string|Function} formatter - The formatter to be used for formatting results.
+ * @property {boolean} [console=true] - Whether to log the formatted text to the console.
+ * @property {string} [save] - The file path to save the formatted text to.
  */
-export function reporterFactory(config = {}, options = {}) {
-  /**
-   * The formatter to use for formatting lint results.
-   *
-   * User has a choice of passing a custom formatter function,
-   * or a name of formatter bundled with stylelint by default.
-   *
-   * @type {(string|Function)}
-   */
-  const formatter = typeof config.formatter === 'string' ?
-    formatters[config.formatter] :
-    config.formatter;
 
+import { gFormatters } from './formatters.mjs';
+import writer from './writer.mjs';
+
+/**
+ * Factory function for creating reporters based on the provided configuration.
+ * @param {FormatterConfig} [config={}] - Configuration for the reporter.
+ * @param {Object} [options={}] - Additional options.
+ * @returns {Function} - Reporter function.
+ */
+export default function reporterFactory(config = {}, options = {}) {
   /**
-   * Stylelint reporter function that processes lint results and performs specified actions.
-   *
-   * @param {Object} results - Results of stylelint linting.
-   * @returns {Promise<Array>} A promise resolving with the results of asynchronous tasks performed by the reporter.
+   * Asynchronous reporter function.
+   * @param {Object[]} results - Results to be reported.
+   * @returns {Promise<void>} - A promise that resolves when the reporting is complete.
    */
-  return function reporter(results) {
+  async function reporter(results) {
+    /**
+     * The formatter to be used for formatting results.
+     * @type {string|Function}
+     */
+    const formatter = typeof config.formatter === 'string' ?
+      await gFormatters[config.formatter] :
+      config.formatter;
+
     /**
      * An array to store asynchronous tasks to be executed by the reporter.
-     * @type {Array<Promise>}
+     * @type {Promise<void>[]}
      */
     const asyncTasks = [];
 
@@ -63,7 +59,7 @@ export function reporterFactory(config = {}, options = {}) {
     }
 
     /**
-     * Save the formatted text to a file if saving is enabled.
+     * Saves the formatted text to a file if configured to do so.
      */
     if (config.save) {
       asyncTasks.push(
@@ -73,5 +69,7 @@ export function reporterFactory(config = {}, options = {}) {
 
     // Return a promise that resolves when all asynchronous tasks are completed.
     return Promise.all(asyncTasks);
-  };
+  }
+
+  return reporter;
 }

@@ -1,38 +1,52 @@
 /*!
- * Gulp Stylelint (v2.0.0-dev): src/index.js
- * Copyright (c) 2023 Adorade (https://github.com/adorade/gulp-stylelint-esm)
+ * Gulp Stylelint (v2.0.0-dev): src/index.mjs
+ * Copyright (c) 2023-24 Adorade (https://github.com/adorade/gulp-stylelint-esm)
  * License under MIT
  * ========================================================================== */
 
-import PluginError from 'plugin-error';
+/**
+ * @typedef {Object} LintOptions
+ * @property {string} [code] - The CSS code to lint.
+ * @property {string} [codeFilename] - The filename associated with the CSS code.
+ */
+
+/**
+ * @typedef {Object} PluginOptions
+ * @property {boolean} [failAfterError=true] - Whether to fail the Gulp task after encountering lint errors.
+ * @property {boolean} [debug=false] - Whether to enable debug mode.
+ * @property {Object[]} [reporters] - Configuration for custom reporters.
+ */
+
+/**
+ * @typedef {Object} ReporterConfig
+ * @property {Function} reporter - The custom reporter function.
+ * @property {Object} options - Options for the custom reporter.
+ */
+
+import PluginError from '@adorade/plugin-error';
 import stylelint from 'stylelint';
-const { formatters, lint } = stylelint;
+const { lint } = stylelint;
 
 import { Transform } from 'node:stream';
 
-import { applySourcemap } from './apply-sourcemap.mjs';
-import { reporterFactory } from './reporter-factory.mjs';
+import applySourcemap from './apply-sourcemap.mjs';
+import reporterFactory from './reporter-factory.mjs';
 
 /**
- * The name of the gulp-stylelint-esm plugin.
+ * The name of the Gulp plugin.
  * @type {string}
  */
 const pluginName = 'gulp-stylelint-esm';
 
 /**
- * Gulp plugin for stylelint with ES module support.
- *
- * @param {Object} options - Options for the plugin.
- * @param {string} options.reportOutputDir - Common path for all reporters.
- * @param {[Object]} options.reporters - Reporter configurations.
- * @param {boolean} options.failAfterError - Whether to fail the Gulp task after encountering errors.
- * @param {boolean} options.debug - Whether to enable debugging mode.
- * @returns {stream.Transform} A transform stream for processing files in Gulp pipes.
+ * Gulp plugin for linting CSS using stylelint.
+ * @param {PluginOptions} options - Options for the Gulp plugin.
+ * @returns {NodeJS.ReadWriteStream} - A Gulp transform stream.
  */
-function gStylelintEsm(options) {
+export default function gStylelintEsm(options) {
   /**
-   * The merged options for the plugin.
-   * @type {Object}
+   * Merges default options with user-provided options.
+   * @type {PluginOptions}
    */
   const pluginOptions = Object.assign({
     failAfterError: true,
@@ -41,19 +55,17 @@ function gStylelintEsm(options) {
 
   /**
    * Creates an array of reporter instances based on the provided configuration and plugin options.
-   *
    * @param {Object} pluginOptions - Options for the plugin.
-   * @param {Array<Object>} pluginOptions.reporters - An array of reporter configurations.
-   * @returns {Array<Reporter>} An array of instantiated reporter instances.
-   *
-   * @type {Array<Function>}
+   * @param {Object[]} pluginOptions.reporters - An array of reporter configurations.
+   * @returns {Reporter[]} An array of instantiated reporter instances.
+   * @type {Function[]}
    */
   const reporters = (pluginOptions.reporters || [])
     .map(config => reporterFactory(config, pluginOptions));
 
   /**
-   * Lint options for stylelint's `lint` function.
-   * @type {Object}
+   * Options for linting, excluding properties not relevant to stylelint.
+   * @type {LintOptions}
    */
   const lintOptions = Object.assign({}, options);
 
@@ -68,10 +80,10 @@ function gStylelintEsm(options) {
   delete lintOptions.debug;
 
   /**
-   * A list of lint promises to be resolved for each file in the stream.
-   * @type {Array<Promise>}
+   * List to store lint promises for each file.
+   * @type {Promise[]}
    */
-  let lintPromiseList = [];
+  const lintPromiseList = [];
 
   /**
    * Handles each file in the stream, performs linting, and processes the results.
@@ -81,14 +93,10 @@ function gStylelintEsm(options) {
    *
    * @param {File} file - Piped file.
    * @param {string} encoding - File encoding.
-   * @param {Function} done - File pipe callback function to signal completion.
-   * @returns {undefined} Nothing is returned (done callback is used instead).
+   * @param {Function} done - Callback function to signal completion.
+   * @returns {undefined} Nothing is returned (done callback is usedinstead).
    */
-  async function onFile(file, encoding, done) {
-    /**
-     * Check if the file is null (empty).
-     * @type {boolean}
-     */
+  function onFile(file, encoding, done) {
     if (file.isNull()) {
       return done(null, file);
     }
@@ -153,9 +161,9 @@ function gStylelintEsm(options) {
   }
 
   /**
-   * Passes lint results through configured reporters and awaits their execution.
-   * @param {Array<Object>} lintResults - Results of linting for each file.
-   * @returns {Promise<Array<Object>>} A promise resolving to lint results after passing through reporters.
+   * Passes lint results through user-defined reporters.
+   * @param {Object[]} lintResults - Results of stylelint for each file.
+   * @returns {Promise<Object[]>} - Promise resolving to lint results.
    */
   async function passLintResultsThroughReporters(lintResults) {
     /**
@@ -184,19 +192,17 @@ function gStylelintEsm(options) {
 
   /**
    * Checks if a warning has an error severity.
-   *
    * @param {Object} warning - Stylelint warning object.
-   * @returns {boolean} True if the severity is 'error', false otherwise.
+   * @returns {boolean} - True if the severity is 'error', false otherwise.
    */
   function isErrorSeverity(warning) {
     return warning.severity === 'error';
   }
 
   /**
-   * Handles the end of the stream, resolves lint promises, and triggers error reporting or completion.
-   *
+   * Handles the end of the stream, emitting errors if necessary.
    * @param {Function} done - Callback function to signal completion of the stream.
-   * @returns {undefined} Nothing is returned (done callback is used instead).
+   * @returns {undefined} Nothing is returned (done callback is usedinstead).
    */
   function onStreamEnd(done) {
     /**
@@ -228,7 +234,10 @@ function gStylelintEsm(options) {
            * Emit an error and trigger the completion callback if there are errors and failAfterError is enabled.
            */
           if (pluginOptions.failAfterError && errorCount > 0) {
-            this.emit('error', new PluginError(pluginName, `Failed with ${errorCount} ${errorCount === 1 ? 'error' : 'errors'}`));
+            this.emit('error', new PluginError(
+              pluginName,
+              `Failed with ${errorCount} ${errorCount === 1 ? 'error' : 'errors'}`
+            ));
           }
 
           // Signal completion of the stream
@@ -255,8 +264,8 @@ function gStylelintEsm(options) {
   }
 
   /**
-   * The transform stream for processing files.
-   * @type {stream.Transform}
+   * Gulp transform stream for linting CSS files using stylelint.
+   * @type {NodeJS.ReadWriteStream}
    */
   const stream = new Transform({
     objectMode: true,
@@ -267,14 +276,3 @@ function gStylelintEsm(options) {
   // Resuming the stream
   return stream.resume();
 }
-
-/**
- * The formatters available for use with the Gulp Stylelint plugin.
- * `formatters` bundled with stylelint by default.
- *
- * @type {Object}
- */
-gStylelintEsm.formatters = formatters;
-
-// Exporting the Gulp Stylelint plugin as the default export
-export default gStylelintEsm;
