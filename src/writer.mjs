@@ -1,5 +1,5 @@
 /*!
- * Gulp Stylelint (v2.0.0-dev): src/writer.mjs
+ * Gulp Stylelint (v2.0.0): src/writer.mjs
  * Copyright (c) 2023-24 Adorade (https://github.com/adorade/gulp-stylelint-esm)
  * License under MIT
  * ========================================================================== */
