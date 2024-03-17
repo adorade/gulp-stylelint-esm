@@ -43,9 +43,9 @@
     "fancy-log": "2.0.0"
   },
   "devDependencies": {
-    "@babel/core": "7.23.9",
+    "@babel/core": "7.24.0",
     "@babel/eslint-parser": "7.23.10",
-    "@babel/preset-env": "7.23.9",
+    "@babel/preset-env": "7.24.0",
     "babel-jest": "29.7.0",
     "eslint": "8.56.0",
     "eslint-config-stylelint": "21.0.0",
