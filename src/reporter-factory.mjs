@@ -25,13 +25,13 @@ import writer from './writer.mjs';
 export default function reporterFactory(config = {}, options = {}) {
   /**
    * Asynchronous reporter function.
-   * @param {Object[]} results - Results to be reported.
+   * @param {import('stylelint').LinterResult} result - The result object from the stylelint linter.
    * @returns {Promise<void>} - A promise that resolves when the reporting is complete.
    */
-  async function reporter(results) {
+  async function reporter(result) {
     /**
      * The formatter to be used for formatting results.
-     * @type {string|Function}
+     * @type {import('stylelint').Formatter}
      */
     const formatter = typeof config.formatter === 'string' ?
       await gFormatters[config.formatter] :
@@ -47,7 +47,7 @@ export default function reporterFactory(config = {}, options = {}) {
      * The formatted text produced by the specified formatter.
      * @type {string}
      */
-    const formattedText = formatter(results);
+    const formattedText = formatter(result.results, result);
 
     /**
      * Log the formatted text to the console if console logging is enabled and the text is not empty.

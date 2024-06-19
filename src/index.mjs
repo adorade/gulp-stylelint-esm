@@ -162,20 +162,13 @@ export default function gStylelintEsm(options) {
 
   /**
    * Passes lint results through user-defined reporters.
-   * @param {Object[]} lintResults - Results of stylelint for each file.
-   * @returns {Promise<Object[]>} - Promise resolving to lint results.
+   * @param {import('stylelint').LinterResult[]} lintResults - Results of stylelint for each file.
+   * @returns {Promise<import('stylelint').LinterResult[]>} - Promise resolving to lint results.
    */
   async function passLintResultsThroughReporters(lintResults) {
     /**
-     * Combine lint results into a single array of warnings.
-     * @type {Array<Object>}
-     */
-    const warnings = lintResults
-      .reduce((accumulated, res) => accumulated.concat(res.results), []);
-
-    /**
      * Array of promises representing the execution of each configured reporter.
-     * @type {Array<Promise>}
+     * @type {Promise[]}
      */
     await Promise.all(
       /**
@@ -183,7 +176,7 @@ export default function gStylelintEsm(options) {
        * @param {Function} reporter - Reporter function.
        * @returns {Promise} A promise representing the execution of a reporter.
        */
-      reporters.map(reporter => reporter(warnings))
+      reporters.flatMap(reporter => lintResults.map(lintResult => reporter(lintResult)))
     );
 
     // Return the original lint results after passing through reporters
