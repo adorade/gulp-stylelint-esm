@@ -13,7 +13,9 @@ A [Gulp](https://gulpjs.com/) plugin that runs [stylelint](https://github.com/st
 
 ## Installation
 
-> **REQUIREMENTS**: Supports **stylelint > 16** and **node >= 18.12.0**.
+> [!NOTE]
+> **REQUIREMENTS**:
+> Supports **gulp v4 and v5**, **stylelint > 16** and **node >= 18.12.0**.
 
 ```sh
 # YARN
