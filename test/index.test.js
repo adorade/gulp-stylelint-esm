@@ -4,7 +4,7 @@
  * License under MIT
  * ========================================================================== */
 
-import gulp from 'gulp';
+import gulp from './gulp.mjs';
 
 import fs from 'node:fs';
 import path from 'node:path';

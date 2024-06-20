@@ -4,7 +4,7 @@
  * License under MIT
  * ========================================================================== */
 
-import gulp from 'gulp';
+import gulp from './gulp.mjs';
 import gulpCleanCss from 'gulp-clean-css';
 import gulpConcat from 'gulp-concat';
 
