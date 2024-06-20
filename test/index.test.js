@@ -32,21 +32,25 @@ describe('Plugin Functionality', () => {
       .pipe(gStylelintEsm())
       .on('error', (error) => {
         expect(error.message).toBe('Streaming is not supported');
-        done();
       });
-  });
-  // test('should not emit an error on buffered file', (done) => {
-  //   const stream = gulp.src(fixtures('basic.css'), {
-  //     buffer: true,
-  //   });
 
-  //   stream
-  //     .pipe(gStylelintEsm())
-  //     .on('error', (error) => {
-  //       expect(error).toBe(undefined);
-  //       done();
-  //     });
-  // });
+    done();
+  });
+  test('should not emit an error on buffered file', (done) => {
+    const stream = gulp.src(fixtures('basic.css'), {
+      buffer: true,
+    });
+
+    stream
+      .pipe(gStylelintEsm({
+        config: { rules: {} }
+      }))
+      .on('error', (error) => {
+        expect(error).toBe(undefined);
+      });
+
+    done();
+  });
   test('should NOT emit an error when configuration is set', async () => {
     const stream = gulp.src(fixtures('basic.css'));
 
@@ -61,6 +65,22 @@ describe('Plugin Functionality', () => {
       });
     } catch (error) {
       throw new Error(`Unexpected error: ${error}`);
+    }
+  });
+  test('should emit an error when configuration is NOT set', async () => {
+    const stream = gulp.src(fixtures('basic.css'));
+
+    expect.assertions(1);
+
+    try {
+      await new Promise((resolve, reject) => {
+        stream
+          .pipe(gStylelintEsm())
+          .on('error', () => reject(new Error('Error emitted')))
+          .on('finish', resolve);
+      });
+    } catch (error) {
+      expect(error.message).toBe('Error emitted');
     }
   });
   test('should emit an error when linter complains', async () => {

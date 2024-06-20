@@ -106,9 +106,7 @@ export default function gStylelintEsm(options) {
      * @type {boolean}
      */
     if (file.isStream()) {
-      this.emit('error', new PluginError(pluginName, 'Streaming is not supported'));
-
-      return done();
+      return done(new PluginError(pluginName, 'Streaming is not supported'));
     }
 
     /**
