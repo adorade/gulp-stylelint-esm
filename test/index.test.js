@@ -149,4 +149,24 @@ describe('Plugin Functionality', () => {
       fs.rmdirSync(outputDir);
     }
   });
+  test('should emit an error if there was a finish event with failAfterError', async () => {
+    const stream = gulp.src(fixtures('invalid.css'));
+
+    expect.assertions(1);
+
+    await new Promise((resolve) => {
+      stream
+        .pipe(gStylelintEsm({
+          failAfterError: true,
+          config: { rules: { 'color-hex-length': 'short' } },
+        }))
+        .on('error', (error) => {
+          expect(error.message).toBe('Failed with 1 error');
+          resolve();
+        })
+        .on('finish', () => {
+          throw new Error('There should be no finish event');
+        });
+    });
+  });
 });

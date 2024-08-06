@@ -225,14 +225,15 @@ export default function gStylelintEsm(options) {
            * Emit an error and trigger the completion callback if there are errors and failAfterError is enabled.
            */
           if (pluginOptions.failAfterError && errorCount > 0) {
-            this.emit('error', new PluginError(
+            done(new PluginError(
               pluginName,
               `Failed with ${errorCount} ${errorCount === 1 ? 'error' : 'errors'}`
             ));
           }
-
-          // Signal completion of the stream
-          done();
+          else {
+            // Signal completion of the stream
+            done();
+          }
         });
       })
       .catch(error => {
@@ -244,12 +245,9 @@ export default function gStylelintEsm(options) {
           /**
            * Emit an error and trigger the completion callback with an error if an exception occurs.
            */
-          this.emit('error', new PluginError(pluginName, error, {
+          done(new PluginError(pluginName, error, {
             showStack: Boolean(pluginOptions.debug)
           }));
-
-          // Signal completion of the stream
-          done();
         });
       });
   }
