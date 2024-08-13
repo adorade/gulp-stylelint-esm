@@ -7,14 +7,10 @@
 module.exports = {
   parser: "@babel/eslint-parser",
   env: {
-    browser: true,
     node: true,
     es6: true
   },
   extends: 'stylelint',
-  globals: {
-    module: true
-  },
   parserOptions: {
     ecmaVersion: 2024,
     requireConfigFile: false,
