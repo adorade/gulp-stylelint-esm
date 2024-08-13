@@ -54,7 +54,7 @@ export default function reporterFactory(config = {}, options = {}) {
      */
     if (config.console && formattedText.trim()) {
       asyncTasks.push(
-        fancyLog.info(`\n${formattedText}\n`)
+        fancyLog.info(`${formattedText}`)
       );
     }
 

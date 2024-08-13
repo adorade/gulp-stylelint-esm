@@ -86,6 +86,8 @@ describe('Plugin Functionality', () => {
   test('should emit an error when linter complains', async () => {
     const stream = gulp.src(fixtures('invalid.css'));
 
+    expect.assertions(1);
+
     try {
       await new Promise((resolve, reject) => {
         stream
