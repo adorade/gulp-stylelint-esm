@@ -34,7 +34,7 @@ describe('Reporter Functionality', () => {
 
     reporter({});
 
-    expect(fancyLog.info.calledWith('\nfoo\n')).toBeTruthy();
+    expect(fancyLog.info.calledWith('foo')).toBeTruthy();
 
     fancyLog.info.restore();
   });
