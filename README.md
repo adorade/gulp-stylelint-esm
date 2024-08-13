@@ -26,15 +26,14 @@ npm install stylelint gulp-stylelint-esm --save-dev
 
 ## Quick start
 
-Once you have [configured stylelint](https://stylelint.io/user-guide/configuration/) (e.g. you have a _.stylelintrc_ file), start with the following code. You will find additional configuration [options](#options) below.
+Once you have [configured stylelint](https://stylelint.io/user-guide/configuration/), start with the following code. You will find additional configuration [options](#options) below.
 
 ```js
-import gulp from 'gulp';
+import { src } from 'gulp';
 import gStylelintEsm from 'gulp-stylelint-esm';
 
 function lintCssTask() {
-  return gulp
-    .src('src/**/*.css')
+  return src('src/**/*.css')
     .pipe(gStylelintEsm({
       reporters: [
         { formatter: 'string', console: true }
@@ -60,13 +59,12 @@ Formatters bundled with stylelint: `"compact"`, `"github"`, `"json"`, `"string (
 and accepts a **custom set of options** listed below:
 
 ```js
-import gulp from 'gulp';
+import { src } from 'gulp';
 import gStylelintEsm from 'gulp-stylelint-esm';
 import { myStylelintFormatter } from 'my-stylelint-formatter';
 
 function lintCssTask() {
-  return gulp
-    .src('src/**/*.css')
+  return src('src/**/*.css')
     .pipe(gStylelintEsm({
       failAfterError: true,
       reportOutputDir: 'reports/lint',
@@ -116,17 +114,18 @@ When set to `true`, the error handler will print an error stack trace. Defaults 
 
 The `fix: true` option instructs stylelint to try to fix as many issues as possible. The fixes are applied to the gulp stream. The fixed content can be saved to file using gulp `dest`.
 
+> NOTE: Not all stylelint rules can be automatically fixed, so it's advisable to manually resolve errors.
+
 ```js
-import gulp from 'gulp';
+import { src, dest } from 'gulp';
 import gStylelintEsm from 'gulp-stylelint-esm';
 
 function fixCssTask() {
-  return gulp
-    .src('src/**/*.css')
+  return src('src/**/*.css')
     .pipe(gStylelintEsm({
       fix: true
     }))
-    .pipe(gulp.dest('src'));
+    .pipe(dest('src'));
 }
 ```
 
