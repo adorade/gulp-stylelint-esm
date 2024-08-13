@@ -1,6 +1,6 @@
 {
   "name": "gulp-stylelint-esm",
-  "version": "2.1.0",
+  "version": "2.2.0",
   "description": "Gulp plugin for stylelint with ES module support.",
   "author": {
     "name": "Adorade",
@@ -48,7 +48,7 @@
     "@babel/preset-env": "7.25.3",
     "babel-jest": "29.7.0",
     "eslint": "8.57.0",
-    "eslint-config-stylelint": "21.0.0",
+    "eslint-config-stylelint": "22.0.0",
     "gulp": "5.0.0",
     "gulp-clean-css": "4.3.0",
     "gulp-concat": "2.6.1",
