@@ -1,6 +1,6 @@
 {
   "name": "gulp-stylelint-esm",
-  "version": "2.2.0",
+  "version": "3.0.0-dev",
   "description": "Gulp plugin for stylelint with ES module support.",
   "author": {
     "name": "Adorade",
