@@ -1,37 +1,40 @@
 /*!
- * Gulp Stylelint (v2.2.0): src/reporter-factory.mjs
+ * Gulp Stylelint (v3.0.0-beta): src/reporter-factory.mjs
  * Copyright (c) 2023-24 Adorade (https://github.com/adorade/gulp-stylelint-esm)
  * License under MIT
  * ========================================================================== */
 
-import fancyLog from 'fancy-log';
-
-/**
- * @typedef {Object} FormatterConfig
- * @property {string|Function} formatter - The formatter to be used for formatting results.
- * @property {boolean} [console=true] - Whether to log the formatted text to the console.
- * @property {string} [save] - The file path to save the formatted text to.
- */
-
 import { gFormatters } from './formatters.mjs';
-import writer from './writer.mjs';
+import writeOutputLog from './writer.mjs';
 
 /**
- * Factory function for creating reporters based on the provided configuration.
- * @param {FormatterConfig} [config={}] - Configuration for the reporter.
- * @param {Object} [options={}] - Additional options.
- * @returns {Function} - Reporter function.
+ * @typedef {import('stylelint').LintResult} LintResult
+ * @typedef {import('stylelint').Formatter} Formatter
+ * @typedef {(formattedText: string, filePath: string) => Promise<void>} Writer
+ *
+ * @typedef {Object} Config
+ * @property {string | Formatter} formatter
+ * @property {boolean} [console]
+ * @property {string} [save]
  */
-export default function reporterFactory(config = {}, options = {}) {
+
+/**
+ * Creates a reporter function based on the provided configuration.
+ *
+ * @param {Config} config
+ * @returns {(result: {results: LintResult[]}) => Promise<void[]>}
+ */
+export default function reporterFactory(config = {}) {
   /**
    * Asynchronous reporter function.
-   * @param {import('stylelint').LinterResult} result - The result object from the stylelint linter.
-   * @returns {Promise<void>} - A promise that resolves when the reporting is complete.
+   * @param {Object} result
+   * @param {LintResult[]} result.results
+   * @returns {Promise<void[]>}
    */
   async function reporter(result) {
     /**
      * The formatter to be used for formatting results.
-     * @type {import('stylelint').Formatter}
+     * @type {Formatter}
      */
     const formatter = typeof config.formatter === 'string' ?
       await gFormatters[config.formatter] :
@@ -50,24 +53,25 @@ export default function reporterFactory(config = {}, options = {}) {
     const formattedText = formatter(result.results, result);
 
     /**
-     * Log the formatted text to the console if console logging is enabled and the text is not empty.
+     * Log the formatted text to the console if console logging is enabled
+     * and the text is not empty.
      */
     if (config.console && formattedText.trim()) {
       asyncTasks.push(
-        fancyLog.info(`${formattedText}`)
+        process.stdout.write(formattedText.trimStart())
       );
     }
 
     /**
-     * Saves the formatted text to a file if configured to do so.
+     * Saves the formatted text to a log file if configured to do so.
      */
-    if (config.save) {
+    if (config.log) {
       asyncTasks.push(
-        writer(formattedText, config.save, options.reportOutputDir)
+        writeOutputLog(config.log, formattedText.trim())
       );
     }
 
-    // Return a promise that resolves when all asynchronous tasks are completed.
+    // Return a promise that resolves when all asynchronous tasks are completed
     return Promise.all(asyncTasks);
   }
 

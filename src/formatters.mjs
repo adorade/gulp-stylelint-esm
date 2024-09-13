@@ -1,16 +1,18 @@
 /*!
- * Gulp Stylelint (v2.2.0): src/formatters.mjs
+ * Gulp Stylelint (v3.0.0-beta): src/formatters.mjs
  * Copyright (c) 2023-24 Adorade (https://github.com/adorade/gulp-stylelint-esm)
  * License under MIT
  * ========================================================================== */
 
 import stylelint from 'stylelint';
-const { formatters } = stylelint;
 
 /**
- * The formatters available for use with the Gulp Stylelint plugin.
- * `formatters` bundled with stylelint by default.
- *
- * @type {Object}
+ * @typedef {import('stylelint').Formatter} Formatter
+ * @typedef {Record<string, Formatter>} FormatterDictionary
  */
+
+/** @type {FormatterDictionary} */
+const { formatters } = stylelint;
+
+/** @type {FormatterDictionary} */
 export const gFormatters = formatters;

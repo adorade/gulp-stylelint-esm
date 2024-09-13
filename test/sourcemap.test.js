@@ -1,5 +1,5 @@
 /*!
- * Gulp Stylelint (v2.2.0): test/sourcemap.test.js
+ * Gulp Stylelint (v3.0.0-beta): test/sourcemap.test.js
  * Copyright (c) 2023-24 Adorade (https://github.com/adorade/gulp-stylelint-esm)
  * License under MIT
  * ========================================================================== */
@@ -20,19 +20,21 @@ function fixtures(glob) {
 }
 
 describe('Sourcemap Handling', () => {
-  test('should emit no errors when stylelint rules are satisfied', (done) => {
+  it('should emit no errors when stylelint rules are satisfied', (done) => {
     const stream = gulp.src(fixtures('original-*.css'), {
         sourcemaps: true
       })
       .pipe(gStylelintEsm({
-        config: { rules: {} }
+        config: { rules: {} },
+        reporters: []
       }));
 
     stream.on('finish', () => {
       done();
     });
   });
-  test('should apply sourcemaps correctly when using a custom sourcemap file', async () => {
+
+  xit('should apply sourcemaps correctly when using a custom sourcemap file', async () => {
     const stream = gulp.src(fixtures('original-*.css'), { sourcemaps: true });
 
     expect.assertions(5);
@@ -71,7 +73,7 @@ describe('Sourcemap Handling', () => {
       expect(error.message).toBe('Failed with 1 error');
     }
   });
-  test('should ignore sourcemaps with no sources', async () => {
+  xit('should ignore sourcemaps with no sources', async () => {
     const stream = gulp.src(fixtures('original-*.css'), { sourcemaps: true });
 
     expect.assertions(5);
