@@ -15,6 +15,7 @@
   "type": "module",
   "exports": {
     ".": {
+      "types": "./types/index.d.mts",
       "default": "./src/index.mjs"
     },
     "./package.json": "./package.json"
@@ -23,6 +24,7 @@
     "src/*.mjs",
     "types/*.d.mts"
   ],
+  "types": "types",
   "keywords": [
     "gulpplugin",
     "gulpfriendly",
@@ -59,7 +61,7 @@
     "gulp-clean-css": "4.3.0",
     "gulp-concat": "2.6.1",
     "jest": "29.7.0",
-    "sinon": "19.0.0",
+    "sinon": "18.0.0",
     "stylelint": "16.9.0"
   },
   "engines": {
