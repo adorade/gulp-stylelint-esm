@@ -5,6 +5,7 @@
  * ========================================================================== */
 
 import { gFormatters } from './formatters.mjs';
+import stylishFormatter from './stylish-formatter.mjs';
 import writeOutputLog from './writer.mjs';
 
 /**
@@ -36,9 +37,19 @@ export default function reporterFactory(config = {}) {
      * The formatter to be used for formatting results.
      * @type {Formatter}
      */
-    const formatter = typeof config.formatter === 'string' ?
-      await gFormatters[config.formatter] :
-      config.formatter;
+    let formatter = config.formatter || 'string';
+
+    if (typeof formatter === 'string') {
+      if (formatter === 'stylish') {
+        formatter = stylishFormatter;
+      } else if (formatter in gFormatters) {
+        formatter = await gFormatters[formatter];
+      } else {
+        const buildFormatter = 'stylish, compact, github, json, string, tap, unix, verbose';
+
+        throw new Error(`Invalid formatter: ${reporter.formatter}. Use one of: "${buildFormatter}"`);
+      }
+    }
 
     /**
      * An array to store asynchronous tasks to be executed by the reporter.
@@ -58,7 +69,7 @@ export default function reporterFactory(config = {}) {
      */
     if (config.console && formattedText.trim()) {
       asyncTasks.push(
-        process.stdout.write(formattedText.trimStart())
+        process.stdout.write(formattedText)
       );
     }
 

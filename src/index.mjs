@@ -47,7 +47,7 @@ export default function gStylelintEsm(options) {
     failAfterError: true,
     fix: false,
     debug: false,
-    reporters: [{ formatter: 'string', console: true }],
+    reporters: [{ formatter: 'stylish', console: true }],
 
     // Overwrite default values with provided options
     ...options
