@@ -8,7 +8,7 @@ import stylishFormatter from '../src/stylish-formatter.mjs';
 
 import { cleanFormatterOutput } from './testUtils/cleanOutput.js';
 
-xdescribe('stylishFormatter', () => {
+describe('stylishFormatter', () => {
   let actualTTY;
   let actualColumns;
 

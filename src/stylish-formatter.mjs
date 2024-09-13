@@ -18,6 +18,7 @@ import {
   pluralize as pl
 } from './utils.mjs';
 
+// Symbols for different severity levels
 const symbols = {
   info: blue('ℹ'),
   warning: yellow('⚠'),
@@ -27,6 +28,9 @@ const symbols = {
 
 /**
  * @type {import('stylelint').Formatter}
+ * @param {import('stylelint').LintResult[]} results
+ * @param {import('stylelint').LinterReturnValue} returnValue
+ * @returns {string}
  */
 export default function stylishFormatter(results, returnValue) {
   let output = invalidOptionsFormatter(results);
@@ -49,12 +53,14 @@ export default function stylishFormatter(results, returnValue) {
           const symbol = warning.severity === 'error' ? symbols.error : symbols.warning;
           const text = formatMessageText(warning);
 
+          // Update severity counts
           calcSeverityCounts(warning.severity, resultCounts);
 
           const fixable = metaData?.[warning.rule]?.fixable;
           let ruleFixable = '';
 
           if (fixable === true) {
+            // Update fixable counts
             calcSeverityCounts(warning.severity, fixableCounts);
             ruleFixable = symbols.success;
           }
