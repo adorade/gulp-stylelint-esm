@@ -24,7 +24,7 @@ const symbols = {
   warning: yellow('⚠'),
   error: red('✖'),
   success: green('✔'),
-  fixable: blue('✔'),
+  fixable: green('♻'),
 };
 
 /**

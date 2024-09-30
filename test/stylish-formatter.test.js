@@ -112,9 +112,9 @@ describe('stylishFormatter', () => {
 
     const expectedOutput = [
       'path/to/file.css',
-      '  1:1  ×  Unexpected foo  √  no-foo',
+      '  1:1  ×  Unexpected foo  o  no-foo',
       '  2:1  ×  Unexpected bar     no-bar',
-      '  3:1  ‼  Unexpected baz  √  no-baz',
+      '  3:1  ‼  Unexpected baz  o  no-baz',
       '',
       '× 3 problems (2 errors, 1 warning)',
       '  1 error and 1 warning potentially fixable with the "fix: true" option.'
@@ -155,7 +155,7 @@ describe('stylishFormatter', () => {
 
     const expectedOutput = [
       'path/to/file.css',
-      '  1:1  ×  Unexpected foo  √  no-foo',
+      '  1:1  ×  Unexpected foo  o  no-foo',
       '  2:1  ×  Unexpected bar     no-bar',
       '',
       '× 2 problems (2 errors, 0 warnings)',
@@ -198,7 +198,7 @@ describe('stylishFormatter', () => {
     const expectedOutput = [
       'path/to/file.css',
       '  1:1  ×  Unexpected foo     no-foo',
-      '  2:1  ‼  Unexpected bar  √  no-bar',
+      '  2:1  ‼  Unexpected bar  o  no-bar',
       '',
       '× 2 problems (1 error, 1 warning)',
       '  1 warning potentially fixable with the "fix: true" option.'
@@ -250,7 +250,7 @@ describe('stylishFormatter', () => {
       'path/to/file.css',
       '  1:2  ×  Unexpected foo     no-foo',
       '  1:2  ‼  Unexpected bar     no-bar',
-      '  1:2  ‼  Unexpected baz  √  no-baz',
+      '  1:2  ‼  Unexpected baz  o  no-baz',
       '',
       '× 3 problems (1 error, 2 warnings)',
       '  1 warning potentially fixable with the "fix: true" option.'

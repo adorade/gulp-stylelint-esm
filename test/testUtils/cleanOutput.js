@@ -13,6 +13,7 @@ symbolConversions.set('ℹ', 'i');
 symbolConversions.set('✔', '√');
 symbolConversions.set('⚠', '‼');
 symbolConversions.set('✖', '×');
+symbolConversions.set('♻', 'o');
 
 /**
  * @param {string} output
