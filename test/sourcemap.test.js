@@ -51,7 +51,7 @@ describe('Sourcemap Handling', () => {
                * @param {import('stylelint').LintResult[]} results
                */
               formatter(results) {
-                results.forEach(result => {
+                results.forEach((result) => {
                   switch (path.basename(result.source)) {
                     case 'original-a.css':
                       expect(result.warnings[0].line).toBe(2);
@@ -88,7 +88,7 @@ describe('Sourcemap Handling', () => {
                * @param {import('stylelint').LintResult[]} results
                */
               formatter(results) {
-                results.forEach(result => {
+                results.forEach((result) => {
                   switch (path.basename(result.source)) {
                     case 'original-a.css':
                       expect(result.warnings[0].line).toBe(2);

@@ -24,6 +24,7 @@ const symbols = {
   warning: yellow('⚠'),
   error: red('✖'),
   success: green('✔'),
+  fixable: blue('✔'),
 };
 
 /**
@@ -62,7 +63,7 @@ export default function stylishFormatter(results, returnValue) {
           if (fixable === true) {
             // Update fixable counts
             calcSeverityCounts(warning.severity, fixableCounts);
-            ruleFixable = symbols.success;
+            ruleFixable = symbols.fixable;
           }
 
           return [
