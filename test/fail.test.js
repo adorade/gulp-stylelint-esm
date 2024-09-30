@@ -4,7 +4,7 @@
  * License under MIT
  * ========================================================================== */
 
-import gulp from 'gulp';
+import { src } from 'gulp';
 
 import path from 'node:path';
 import url from 'node:url';
@@ -19,7 +19,7 @@ function fixtures(glob) {
 
 describe('Fail after error', () => {
   it('should NOT FAIL after emitting no errors if `failAfterError` is not configured', async () => {
-    const stream = gulp.src(fixtures('basic.css'));
+    const stream = src(fixtures('basic.css'));
 
     await new Promise((resolve) => {
       stream
@@ -35,7 +35,7 @@ describe('Fail after error', () => {
     });
   });
   it('should NOT FAIL after emitting no errors if `failAfterError` is set to true', async () => {
-    const stream = gulp.src(fixtures('basic.css'));
+    const stream = src(fixtures('basic.css'));
 
     await new Promise((resolve) => {
       stream
@@ -52,7 +52,7 @@ describe('Fail after error', () => {
     });
   });
   it('should NOT FAIL after emitting no errors if `failAfterError` is set to false', async () => {
-    const stream = gulp.src(fixtures('basic.css'));
+    const stream = src(fixtures('basic.css'));
 
     await new Promise((resolve) => {
       stream
@@ -70,7 +70,7 @@ describe('Fail after error', () => {
   });
 
   xit('should FAIL after emitting an error if `failAfterError` is not configured', async () => {
-    const stream = gulp.src(fixtures('invalid.css'));
+    const stream = src(fixtures('invalid.css'));
     let errorEmitted = false;
 
     expect.assertions(2);
@@ -94,7 +94,7 @@ describe('Fail after error', () => {
     expect(errorEmitted).toBe(true);
   });
   xit('should FAIL after emitting an error if `failAfterError` is set to true', async () => {
-    const stream = gulp.src(fixtures('invalid.css'));
+    const stream = src(fixtures('invalid.css'));
     let errorEmitted = false;
 
     expect.assertions(2);
@@ -120,7 +120,7 @@ describe('Fail after error', () => {
   });
 
   it('should NOT FAIL after emitting an error if `failAfterError` is set to false', async () => {
-    const stream = gulp.src(fixtures('invalid.css'));
+    const stream = src(fixtures('invalid.css'));
     let errorEmitted = false;
 
     expect.assertions(1);

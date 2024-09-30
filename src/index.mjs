@@ -92,7 +92,7 @@ export default function gStylelintEsm(options) {
    * @param {Error | string | null} error - The error object or string
    * @returns {PluginError} - A PluginError instance
    */
-  function createPluginError(error) {
+  const createPluginError = (error) => {
     if (error instanceof PluginError)
       return error;
 
@@ -112,7 +112,7 @@ export default function gStylelintEsm(options) {
    * @param {LinterResult[]} originalLintResult - Original lint results
    * @returns {LinterResult[]} - Transformed lint results
    */
-  function transformLintResults(originalLintResult) {
+  const transformLintResults = (originalLintResult) => {
     // Combine all results into a single object
     const combinedResult = originalLintResult.reduce((acc, current) => {
       // Merge results arrays
@@ -159,7 +159,7 @@ export default function gStylelintEsm(options) {
    * @param {LinterResult[]} lintResults - Results of stylelint for each file
    * @returns {Promise<LinterResult[]>} - Promise resolving to lint results
    */
-  async function passLintResultsThroughReporters(lintResults) {
+  const passLintResultsThroughReporters = async (lintResults) => {
     /**
      * Array of promises representing the execution of each configured reporter.
      * @type {Promise[]}
@@ -185,7 +185,7 @@ export default function gStylelintEsm(options) {
    * @returns {undefined} - Nothing is returned
    * @throws {PluginError} - If an error occurs during the counting process
    */
-  function countErrors(lintResult) {
+  const countErrors = (lintResult) => {
     /**
      * Count of errors in lint results.
      * @type {number}
@@ -217,36 +217,22 @@ export default function gStylelintEsm(options) {
   }
 
   /**
-   * Handles each file in the stream, performs linting, and processes the results.
-   *
-   * NOTE: files are pushed back to the their pipes only if there are no errors,
-   *       to allow usage of other plugins.
+   * Creates a promise for linting a single file.
    *
    * @param {File} file - Vinyl file object
-   * @param {string} encoding - File encoding
-   * @param {Function} done - Callback function to signal completion
+   * @param {LinterOptions} lintOptions - Options for linting
+   * @returns {Promise<LinterResult>} - Promise resolving to lint results
+   * @throws {PluginError} - If an error occurs during linting
    */
-  async function onFile(file, encoding, done) {
-    if (file.isNull()) {
-      return done(null, file);
-    }
-
-    /**
-     * Check if the file is a stream, emit an error if true, and return.
-     * @type {boolean}
-     */
-    if (file.isStream()) {
-      return done(new PluginError(pluginName, 'Streaming is not supported'));
-    }
-
+  const createLintPromise = async (file, lintOptions) => {
     /**
      * Options for linting the current file.
      * @type {LinterOptions}
      */
     const localLinterOptions = {
-      ...linterOptions,
+      ...lintOptions,
       code: file.contents.toString(),
-      codeFilename: file.path
+      codeFilename: file.path,
     };
 
     try {
@@ -281,22 +267,66 @@ export default function gStylelintEsm(options) {
       }
 
       /**
-       * Add the lint promise to the list.
-       * @type {Promise<Object>}
+       * Return the lint result.
+       * @type {Object}
        */
-      lintPromiseList.push(lintResult);
-
-      /**
-       * Push the file back to the stream.
-       * @type {File}
-       */
-      files.push(file);
-
-      // Don't push the file back to the stream yet
-      done();
+      return lintResult;
     } catch (error) {
+      /**
+       * Throw a PluginError if an error occurs during linting.
+       * @type {PluginError}
+       */
       throw createPluginError(error);
     }
+  }
+
+  /**
+   * Handles each file in the stream, performs linting, and processes the results.
+   *
+   * NOTE: files are pushed back to the their pipes only if there are no errors,
+   *       to allow usage of other plugins.
+   *
+   * @param {File} file - Vinyl file object
+   * @param {string} encoding - File encoding
+   * @param {Function} done - Callback function to signal completion
+   */
+  const onFile = (file, encoding, done) => {
+    if (file.isNull()) {
+      return done(null, file);
+    }
+
+    /**
+     * Check if the file is a stream, emit an error if true, and return.
+     * @type {boolean}
+     */
+    if (file.isStream()) {
+      return done(new PluginError(pluginName, 'Streaming is not supported'));
+    }
+
+    /**
+     * Promise for linting the current file.
+     * @type {Promise<Object>}
+     */
+    const lintPromise = new Promise((resolve, reject) => {
+      createLintPromise(file, linterOptions)
+        .then(lintResult => resolve(lintResult))
+        .catch(error => reject(error));
+    });
+
+    /**
+     * Add the lint promise to the list.
+     * @type {Promise<Object>}
+     */
+    lintPromiseList.push(lintPromise);
+
+    /**
+     * Push the file back to the stream.
+     * @type {File}
+     */
+    files.push(file);
+
+    // Don't push the file back to the stream yet
+    done();
   }
 
   /**
@@ -304,29 +334,56 @@ export default function gStylelintEsm(options) {
    *
    * @param {Function} done - Callback function to signal completion of the stream
    */
-  function onStreamEnd(done) {
-    /**
-     * Promise that resolves with lint results after all lint promises are settled.
-     * @type {Promise<Array<Object>>}
-     */
-    Promise
-      .all(lintPromiseList)
-      .then(transformLintResults)
-      .then(passLintResultsThroughReporters)
-      .then(lintResults => {
-        if (pluginOptions.failAfterError && hasErrors) {
-          // If failAfterError is enabled and there were no errors,
-          // we don't push any files back
-          countErrors.call(this, lintResults);
-        } else {
-          // If no errors, we can push all files back to the stream pipe
-          files.forEach(file => this.push(file));
-          done();
-        }
-      })
-      .catch(error => {
-        throw createPluginError(error);
-      });
+  const onStreamEnd = async function(done) {
+    if (lintPromiseList.length === 0) {
+      return done();
+    }
+
+    try {
+      /**
+       * Array of lint results.
+       * @type {LinterResult[]}
+       */
+      const lintResults = await Promise.all(lintPromiseList);
+
+      /**
+       * Transformed lint results.
+       * @type {LinterResult[]}
+       */
+      const transformedResults = transformLintResults(lintResults);
+
+      /**
+       * Passed lint results through user-defined reporters.
+       * @type {LinterResult[]}
+       */
+      const reportedResults = await passLintResultsThroughReporters(transformedResults);
+
+      /**
+       * Check if there were any errors.
+       * @type {boolean}
+       */
+      if (pluginOptions.failAfterError && hasErrors) {
+        // If failAfterError is enabled and there were no errors,
+        // we don't push any files back
+        countErrors(reportedResults);
+      } else {
+        // If no errors, we can push all files back to the stream pipe
+        files.forEach(file => this.push(file));
+        done();
+      }
+    } catch (error) {
+      /**
+       * Ender the stream with an error.
+       * @type {Function}
+       */
+      done(error);
+
+      /**
+       * Throw a PluginError if an error occurs during linting.
+       * @type {PluginError}
+       */
+      throw createPluginError(error);
+    }
   }
 
   /**

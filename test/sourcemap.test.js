@@ -4,7 +4,8 @@
  * License under MIT
  * ========================================================================== */
 
-import gulp from 'gulp';
+import { src } from 'gulp';
+
 import gulpCleanCss from 'gulp-clean-css';
 import gulpConcat from 'gulp-concat';
 
@@ -21,7 +22,7 @@ function fixtures(glob) {
 
 describe('Sourcemap Handling', () => {
   it('should emit no errors when stylelint rules are satisfied', (done) => {
-    const stream = gulp.src(fixtures('original-*.css'), {
+    const stream = src(fixtures('original-*.css'), {
         sourcemaps: true
       })
       .pipe(gStylelintEsm({
@@ -35,7 +36,7 @@ describe('Sourcemap Handling', () => {
   });
 
   xit('should apply sourcemaps correctly when using a custom sourcemap file', async () => {
-    const stream = gulp.src(fixtures('original-*.css'), { sourcemaps: true });
+    const stream = src(fixtures('original-*.css'), { sourcemaps: true });
 
     expect.assertions(5);
 
@@ -74,7 +75,7 @@ describe('Sourcemap Handling', () => {
     }
   });
   xit('should ignore sourcemaps with no sources', async () => {
-    const stream = gulp.src(fixtures('original-*.css'), { sourcemaps: true });
+    const stream = src(fixtures('original-*.css'), { sourcemaps: true });
 
     expect.assertions(5);
 

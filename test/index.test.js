@@ -4,13 +4,17 @@
  * License under MIT
  * ========================================================================== */
 
-import gulp from 'gulp';
+import { dest, src } from 'gulp';
 
 import fs from 'node:fs';
 import path from 'node:path';
 import url from 'node:url';
 
+import { stub } from 'sinon';
+
 import gStylelintEsm from '../src/index.mjs';
+
+import { createVinylFile } from './testUtils/createVinil.js';
 
 const __dirname = url.fileURLToPath(new URL('.', import.meta.url));
 
@@ -24,7 +28,7 @@ describe('Plugin Functionality', () => {
     done();
   });
   it('should emit an error on streamed file', (done) => {
-    const stream = gulp.src(fixtures('basic.css'), {
+    const stream = src(fixtures('basic.css'), {
       buffer: false,
     });
 
@@ -37,7 +41,7 @@ describe('Plugin Functionality', () => {
     done();
   });
   it('should not emit an error on buffered file', (done) => {
-    const stream = gulp.src(fixtures('basic.css'), {
+    const stream = src(fixtures('basic.css'), {
       buffer: true,
     });
 
@@ -51,61 +55,48 @@ describe('Plugin Functionality', () => {
 
     done();
   });
-  it('should NOT emit an error when configuration is set', async () => {
-    const stream = gulp.src(fixtures('basic.css'));
+  it('should NOT throw an error when configuration is set', (done) => {
+    const stream = src(fixtures('basic.css'))
+      .pipe(
+        gStylelintEsm({
+          config: { rules: {} }
+        })
+      );
 
-    try {
-      await new Promise((resolve, reject) => {
-        stream
-          .pipe(gStylelintEsm({
-            config: { rules: {} }
-          }))
-          .on('error', reject)
-          .on('finish', resolve);
-      });
-    } catch (error) {
-      throw new Error(`Unexpected error: ${error}`);
-    }
+    expect(() => { stream }).not.toThrow();
+    done();
   });
+  it('should throw an error when configuration is NOT set', async () => {
+    const stream = gStylelintEsm();
 
-  xit('should emit an error when configuration is NOT set', async () => {
-    const stream = gulp.src(fixtures('basic.css'));
+    const file = createVinylFile('basic.css', '.foo { color: #f00; }');
 
-    expect.assertions(1);
+    const done = stub();
 
-    try {
-      await new Promise((resolve, reject) => {
-        stream
-          .pipe(gStylelintEsm())
-          .on('error', () => reject(new Error('No configuration provided')))
-          .on('finish', resolve);
-      });
-    } catch (error) {
-      expect(error.message).toBe('No configuration provided');
-    }
+    stream._transform(file, 'utf-8', done);
+
+    await expect(async () => {
+      await stream._flush(done);
+    }).rejects.toThrow('No configuration provided');
   });
-  xit('should emit an error when linter complains', async () => {
-    const stream = gulp.src(fixtures('invalid.css'));
+  it('should throw an error when linter complains', async () => {
+    const stream = gStylelintEsm({
+      config: { rules: { 'color-hex-length': 'short' } },
+      reporters: [],
+    });
 
-    expect.assertions(1);
+    const file = createVinylFile('invalid.css', '.foo { color: #ffffff; }');
 
-    try {
-      await new Promise((resolve, reject) => {
-        stream
-          .pipe(gStylelintEsm({
-            config: { rules: { 'color-hex-length': 'short' } },
-            reporters: [],
-          }))
-          .on('error', () => reject(new Error('Error emitted')))
-          .on('finish', resolve);
-      });
-    } catch (error) {
-      expect(error.message).toBe('Failed with 1 error');
-    }
+    const done = stub();
+
+    stream._transform(file, 'utf-8', done);
+
+    await expect(async () => {
+      await stream._flush(done);
+    }).rejects.toThrow('Failed with 1 error');
   });
-
   it('should ignore file', async () => {
-    const stream = gulp.src([fixtures('basic.css'), fixtures('invalid.css')]);
+    const stream = src([fixtures('basic.css'), fixtures('invalid.css')]);
 
     try {
       await new Promise((resolve, reject) => {
@@ -126,7 +117,7 @@ describe('Plugin Functionality', () => {
     const outputDir = path.resolve(__dirname, '../tmp');
     const outputFilePath = path.join(outputDir, 'invalid.css');
 
-    const stream = gulp.src(inputFilePath, {
+    const stream = src(inputFilePath, {
       sourcemaps: true,
     });
 
@@ -140,7 +131,7 @@ describe('Plugin Functionality', () => {
             fix: true,
           }))
           .on('error', reject)
-          .pipe(gulp.dest(outputDir))
+          .pipe(dest(outputDir))
           .on('finish', resolve);
       });
 
