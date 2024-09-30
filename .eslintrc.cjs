@@ -5,7 +5,7 @@
  * ========================================================================== */
 
 module.exports = {
-  parser: "@babel/eslint-parser",
+  parser: '@babel/eslint-parser',
   env: {
     node: true,
     es6: true
@@ -23,10 +23,13 @@ module.exports = {
   overrides: [
     {
       files: [
-        "test/*.test.js"
+        'test/*.test.js'
       ],
       env: {
         jest: true
+      },
+      rules: {
+        '@stylistic/js/arrow-parens': ['error', 'always'],
       }
     }
   ]

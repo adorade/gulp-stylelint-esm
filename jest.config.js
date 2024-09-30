@@ -6,15 +6,17 @@
 
 /** @type {import('jest').Config} */
 const config =  {
+  displayName: {
+    name: "Gulp Stylelint Plugin",
+    color: "cyan",
+  },
   clearMocks: true,
-  // collectCoverage: true,
   collectCoverageFrom: [
     "src/*.mjs"
   ],
   coverageDirectory: "./.coverage/",
   coverageReporters: [
     "html",
-    "lcov",
     "text"
   ],
   coverageThreshold: {
@@ -24,6 +26,9 @@ const config =  {
       lines: 75,
       statements: 75
     }
+  },
+  fakeTimers: {
+    enableGlobally: true,
   },
   transform: {
     "\\.mjs?$": "babel-jest"
