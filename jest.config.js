@@ -27,9 +27,9 @@ const config =  {
       statements: 75
     }
   },
-  fakeTimers: {
-    enableGlobally: true,
-  },
+  // fakeTimers: {
+  //   enableGlobally: true,
+  // },
   transform: {
     "\\.mjs?$": "babel-jest"
   },
