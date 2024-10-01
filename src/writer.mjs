@@ -4,11 +4,12 @@
  * License under MIT
  * ========================================================================== */
 
-import { dirname, normalize } from 'node:path';
-import { mkdir, writeFile } from 'node:fs/promises';
+import { dirname, normalize, relative } from 'node:path';
+import { mkdir } from 'node:fs/promises';
+import writeFileAtomic from 'write-file-atomic';
 
 import colors from 'ansi-colors';
-const { unstyle } = colors;
+const { blue, green, unstyle } = colors;
 
 /**
  * Writes the given text to a log file at the specified destination.
@@ -17,10 +18,25 @@ const { unstyle } = colors;
  * @param {string} content - The text content to write to the file
  * @returns {Promise<void>} A promise that resolves when the file is written
  */
-export default async function writeOutputLog(filePath, content) {
+export async function writeOutputLog(filePath, content) {
   // Ensure the directory exists
   await mkdir(dirname(filePath), { recursive: true });
 
   // Write the output log
-  await writeFile(normalize(filePath), unstyle(content));
+  await writeFileAtomic(normalize(filePath), unstyle(content));
+}
+
+/**
+ * Overwrites the source file with the given content.
+ *
+ * @param {string} file - The source file
+ * @param {string} content - The content to overwrite the source with
+ * @returns {Promise<void>} A promise that resolves when the file is overwritten
+ */
+export async function overwriteSource(file, content) {
+  process.stdout.write(
+    `${blue(normalize(relative('.', file.path)))} >> ${green('fixed and overwrote')}\n`
+  );
+
+  await writeFileAtomic(normalize(file.path), unstyle(content));
 }

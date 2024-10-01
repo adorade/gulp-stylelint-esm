@@ -103,6 +103,4 @@ export function formatMessageText(message) {
  * @param {number} count
  * @returns {string}
  */
-export function pluralize(count) {
-  return count === 1 ? '' : 's';
-}
+export const pluralize = (count) => count === 1 ? '' : 's';

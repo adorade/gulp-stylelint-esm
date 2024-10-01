@@ -11,6 +11,7 @@ const { lint } = stylelint;
 import { Transform } from 'node:stream';
 
 import applySourcemap from './apply-sourcemap.mjs';
+import { overwriteSource } from '../src/writer.mjs';
 import reporterFactory from './reporter-factory.mjs';
 
 /**
@@ -254,8 +255,14 @@ export default function gStylelintEsm(options) {
        * If fix option is enabled and there are fixes in the lint result, update file contents.
        * @type {boolean}
        */
-      if (pluginOptions.fix && lintResult.code) {
+      if (pluginOptions.fix && lintResult.code !== file.contents.toString()) {
         file.contents = Buffer.from(lintResult.code);
+
+        /**
+         * Overwrite the source file with the fixed code.
+         * @type {Function}
+         */
+        await overwriteSource(file, lintResult.code);
       }
 
       /**

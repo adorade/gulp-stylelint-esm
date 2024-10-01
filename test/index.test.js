@@ -112,14 +112,58 @@ describe('Plugin Functionality', () => {
       throw new Error(`Unexpected error: ${error}`);
     }
   });
-  it('should fix the file without emitting errors', async () => {
-    const inputFilePath = fixtures('invalid.css');
-    const outputDir = path.resolve(__dirname, '../tmp');
+  it('should overwrite the source file when `fix` option is set', async () => {
+    stub(process.stdout, 'write');
+    const outputDir = path.resolve(__dirname, '../tmpa');
+
+    const file = createVinylFile('invalid.css', '.foo {\n  color: #ffffff;\n}\n');
+    const content = file.contents.toString('utf8');
     const outputFilePath = path.join(outputDir, 'invalid.css');
 
-    const stream = src(inputFilePath, {
-      sourcemaps: true,
-    });
+    fs.mkdirSync(outputDir, { recursive: true });
+    fs.writeFileSync(outputFilePath, content, 'utf8');
+
+    const stream = src(outputFilePath);
+
+    expect.assertions(1);
+
+    try {
+      await new Promise((resolve, reject) => {
+        stream
+          .pipe(gStylelintEsm({
+            config: { rules: { 'color-hex-length': 'short' } },
+            fix: true,
+          }))
+          .on('error', reject)
+          .on('finish', resolve);
+      });
+
+      const outputFileContents = fs.readFileSync(outputFilePath, 'utf8');
+
+      expect(outputFileContents).toBe('.foo {\n  color: #fff;\n}\n');
+    } catch (error) {
+      throw new Error(`Unexpected error: ${error}`);
+    } finally {
+      fs.unlinkSync(outputFilePath);
+      fs.rmdirSync(outputDir);
+      process.stdout.write.restore();
+    }
+  });
+  it('should fix the file without emitting errors', async () => {
+    stub(process.stdout, 'write');
+    const inputDir = path.resolve(__dirname, '../tmpb');
+    const outputDir = path.resolve(__dirname, '../tmpc');
+
+    const file = createVinylFile('invalid.css', '.foo {\n  color: #ffffff;\n}\n');
+    const content = file.contents.toString('utf8');
+
+    const inputFilePath = path.join(inputDir, 'invalid.css');
+    const outputFilePath = path.join(outputDir, 'invalid.css');
+
+    fs.mkdirSync(inputDir, { recursive: true });
+    fs.writeFileSync(inputFilePath, content, 'utf8');
+
+    const stream = src(inputFilePath);
 
     expect.assertions(1);
 
@@ -141,8 +185,11 @@ describe('Plugin Functionality', () => {
     } catch (error) {
       throw new Error(`Unexpected error: ${error}`);
     } finally {
+      fs.unlinkSync(inputFilePath);
       fs.unlinkSync(outputFilePath);
+      fs.rmdirSync(inputDir);
       fs.rmdirSync(outputDir);
+      process.stdout.write.restore();
     }
   });
 });

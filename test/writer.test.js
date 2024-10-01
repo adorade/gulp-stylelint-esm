@@ -10,7 +10,7 @@ import path from 'node:path';
 
 import colors from 'ansi-colors';
 
-import writeOutputLog from '../src/writer.mjs';
+import { writeOutputLog } from '../src/writer.mjs';
 
 const __dirname = fileURLToPath(new URL('../', import.meta.url));
 

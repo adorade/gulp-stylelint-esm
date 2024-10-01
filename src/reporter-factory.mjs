@@ -6,7 +6,8 @@
 
 import { gFormatters } from './formatters.mjs';
 import stylishFormatter from './stylish-formatter.mjs';
-import writeOutputLog from './writer.mjs';
+
+import { writeOutputLog } from './writer.mjs';
 
 /**
  * @typedef {import('stylelint').LintResult} LintResult
@@ -78,7 +79,7 @@ export default function reporterFactory(config = {}) {
      */
     if (config.log) {
       asyncTasks.push(
-        writeOutputLog(config.log, formattedText.trim())
+        await writeOutputLog(config.log, formattedText.trim())
       );
     }
 
