@@ -1,52 +1,42 @@
 /*!
- * Gulp Stylelint (v2.2.0): src/writer.mjs
+ * Gulp Stylelint (v3.0.0): src/writer.mjs
  * Copyright (c) 2023-24 Adorade (https://github.com/adorade/gulp-stylelint-esm)
  * License under MIT
  * ========================================================================== */
 
+import { dirname, normalize, relative } from 'node:path';
+import { mkdir } from 'node:fs/promises';
+import writeFileAtomic from 'write-file-atomic';
+
 import colors from 'ansi-colors';
-import fs from 'node:fs';
-import path from 'node:path';
+const { blue, green, unstyle } = colors;
 
 /**
- * Writes text content to a file on the file system.
- * @param {string} text - The content to be written to the file.
- * @param {string} dest - The relative or absolute path of the destination file.
- * @param {string} [destRoot=process.cwd()] - The root directory for the destination file (default: current working directory).
- * @returns {Promise<void>} - A promise that resolves when the writing process is complete.
+ * Writes the given text to a log file at the specified destination.
+ *
+ * @param {string} filePath - The destination path for the file
+ * @param {string} content - The text content to write to the file
+ * @returns {Promise<void>} A promise that resolves when the file is written
  */
-export default function writer(text, dest, destRoot = process.cwd()) {
-  /**
-   * The full path of the destination file, resolving from the destination root.
-   * @type {string}
-   */
-  const fullpath = path.resolve(destRoot, dest);
+export async function writeOutputLog(filePath, content) {
+  // Ensure the directory exists
+  await mkdir(dirname(filePath), { recursive: true });
 
-  /**
-   * Promise to handle the asynchronous writing process.
-   * @type {Promise<void>}
-   */
-  return new Promise((resolve, reject) => {
-    /**
-     * Creates directories recursively for the destination file.
-     * @param {Error} mkdirpError - Error object if directory creation fails.
-     */
-    fs.mkdir(path.dirname(fullpath), { recursive: true }, mkdirpError => {
-      if (mkdirpError) {
-        reject(mkdirpError);
-      } else {
-        /**
-         * Writes the text content to the destination file after successful directory creation.
-         * @param {Error} fsWriteFileError - Error object if file writing fails.
-         */
-        fs.writeFile(fullpath, colors.unstyle(text), fsWriteFileError => {
-          if (fsWriteFileError) {
-            reject(fsWriteFileError);
-          } else {
-            resolve();
-          }
-        });
-      }
-    });
-  });
+  // Write the output log
+  await writeFileAtomic(normalize(filePath), unstyle(content));
+}
+
+/**
+ * Overwrites the source file with the given content.
+ *
+ * @param {string} file - The source file
+ * @param {string} content - The content to overwrite the source with
+ * @returns {Promise<void>} A promise that resolves when the file is overwritten
+ */
+export async function overwriteSource(file, content) {
+  process.stdout.write(
+    `${blue(normalize(relative('.', file.path)))} >> ${green('fixed and overwrote')}\n`
+  );
+
+  await writeFileAtomic(normalize(file.path), unstyle(content));
 }

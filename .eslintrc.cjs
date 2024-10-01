@@ -1,11 +1,11 @@
 /*!
- * Gulp Stylelint (v2.2.0): .eslintrc.cjs
+ * Gulp Stylelint (v3.0.0): .eslintrc.cjs
  * Copyright (c) 2023-24 Adorade (https://github.com/adorade/gulp-stylelint-esm)
  * License under MIT
  * ========================================================================== */
 
 module.exports = {
-  parser: "@babel/eslint-parser",
+  parser: '@babel/eslint-parser',
   env: {
     node: true,
     es6: true
@@ -23,10 +23,24 @@ module.exports = {
   overrides: [
     {
       files: [
-        "test/*.test.js"
+        'src/*.mjs',
+        'test/*.test.js'
+      ],
+      rules: {
+        '@stylistic/js/semi': ['error', 'always'],
+      }
+    },
+    {
+      files: [
+        'test/*.test.js',
+        'test/*.spec.js',
+        'bin/*.spec.js'
       ],
       env: {
         jest: true
+      },
+      rules: {
+        '@stylistic/js/arrow-parens': ['error', 'always'],
       }
     }
   ]

@@ -1,20 +1,22 @@
 /*!
- * Gulp Stylelint (v2.2.0): jest.config.js
+ * Gulp Stylelint (v3.0.0): jest.config.js
  * Copyright (c) 2023-24 Adorade (https://github.com/adorade/gulp-stylelint-esm)
  * License under MIT
  * ========================================================================== */
 
 /** @type {import('jest').Config} */
 const config =  {
+  displayName: {
+    name: "Gulp Stylelint Plugin",
+    color: "cyan",
+  },
   clearMocks: true,
-  // collectCoverage: true,
   collectCoverageFrom: [
     "src/*.mjs"
   ],
   coverageDirectory: "./.coverage/",
   coverageReporters: [
     "html",
-    "lcov",
     "text"
   ],
   coverageThreshold: {
@@ -25,6 +27,9 @@ const config =  {
       statements: 75
     }
   },
+  // fakeTimers: {
+  //   enableGlobally: true,
+  // },
   transform: {
     "\\.mjs?$": "babel-jest"
   },

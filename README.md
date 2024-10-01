@@ -34,11 +34,7 @@ import gStylelintEsm from 'gulp-stylelint-esm';
 
 function lintCssTask() {
   return src('src/**/*.css')
-    .pipe(gStylelintEsm({
-      reporters: [
-        { formatter: 'string', console: true }
-      ]
-    }));
+    .pipe(gStylelintEsm());
 }
 ```
 
@@ -46,7 +42,9 @@ function lintCssTask() {
 
 Below is the list of currently available **stylelint formatters**. Some of them are bundled with stylelint by default and exposed on `gStylelintEsm.formatters` object. Others need to be installed. You can [write a custom formatter](http://stylelint.io/developer-guide/formatters/) to tailor the reporting to your needs.
 
-Formatters bundled with stylelint: `"compact"`, `"github"`, `"json"`, `"string (default)"`, `"tap"`, `"unix"`, `"verbose"`.
+Formatters bundled with stylelint: `"compact", "github", "json", "string", "tap", "unix", "verbose"`.
+
+The plugin comes with a built-in formatter called `"stylish"`, which is set as the **default**.
 
 ## Options
 
@@ -66,55 +64,30 @@ import { myStylelintFormatter } from 'my-stylelint-formatter';
 function lintCssTask() {
   return src('src/**/*.css')
     .pipe(gStylelintEsm({
-      failAfterError: true,
-      reportOutputDir: 'reports/lint',
+      failAfterError: true, // true (default) | false
+      fix: false,           // false (default) | true
       reporters: [
-        { formatter: 'verbose', console: true },
+        { formatter: 'stylish', console: true }, // default
         { formatter: 'json', save: 'report.json' },
         { formatter: myStylelintFormatter, save: 'my-custom-report.txt' }
       ],
-      debug: true
+      debug: false          // false (default) | true
     }));
 }
 ```
 
 ### `failAfterError`
 
-When set to `true`, the process will end with non-zero error code if any error-level warnings were raised. Defaults to `true`.
+When set to `true`, the process will end with non-zero error code if any error-level warnings were raised. Files are pushed back to the their pipes only if there are no errors. Defaults to `true`.
 
-### `reportOutputDir`
+### `fix`
 
-Base directory for lint results written to filesystem. Defaults to **current working directory** `process.cwd()`.
+The `fix: true` (autofix) option instructs stylelint to try to fix as many issues as possible. Defaults to `false`.
 
-### `reporters`
-
-List of reporter configuration objects (see below). Defaults to **an empty array** `[]`.
-
-```js
-{
-  // stylelint results formatter (required):
-  // - pass a function for imported, custom or exposed formatters
-  // - pass a string for formatters bundled with stylelint
-  //   "string (default)", "compact", "github", "json", "tap", "unix", "verbose"
-  formatter: myFormatter,
-
-  // save the formatted result to a file (optional):
-  save: 'text-report.txt',
-
-  // log the formatted result to console (optional):
-  console: true
-}
-```
-
-### `debug`
-
-When set to `true`, the error handler will print an error stack trace. Defaults to `false`.
-
-## Autofix
-
-The `fix: true` option instructs stylelint to try to fix as many issues as possible. The fixes are applied to the gulp stream. The fixed content can be saved to file using gulp `dest`.
-
-> NOTE: Not all stylelint rules can be automatically fixed, so it's advisable to manually resolve errors.
+> NOTE:
+> - fixed files will automatically overwrite the original files; proceed with caution.
+> - the fixes are applied to the gulp stream only if there are no errors, to allow usage of other plugins.
+> - not all stylelint rules can be automatically fixed, so it's advisable to manually resolve errors.
 
 ```js
 import { src, dest } from 'gulp';
@@ -128,6 +101,37 @@ function fixCssTask() {
     .pipe(dest('src'));
 }
 ```
+
+### `reporters`
+
+List of reporter configuration objects (see below). Defaults to:
+
+```js
+reporters: [
+  { formatter: 'stylish', console: true }
+]
+```
+
+```js
+{
+  // stylelint results formatter (required):
+  // - pass a built-in formatter
+  // - pass a function for imported, custom or exposed formatters
+  // - pass a string for formatters bundled with stylelint
+  //   "stylish (default)", "string", "compact", "github", "json", "tap", "unix", "verbose"
+  formatter: stylish,
+
+  // log the formatted result to console (optional):
+  console: true
+
+  // save the formatted result to a file (optional):
+  save: 'text-report.txt',
+}
+```
+
+### `debug`
+
+When set to `true`, the error handler will print an error stack trace. Defaults to `false`.
 
 ## License
 

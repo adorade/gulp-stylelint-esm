@@ -2,6 +2,7 @@
 # Folders to ignore
 node_modules
 archive
+bin
 
 # To do Tasks
 .todo

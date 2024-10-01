@@ -1,80 +1,67 @@
 /*!
- * Gulp Stylelint (v2.2.0): test/writer.test.js
+ * Gulp Stylelint (v3.0.0): test/writer.test.js
  * Copyright (c) 2023-24 Adorade (https://github.com/adorade/gulp-stylelint-esm)
  * License under MIT
  * ========================================================================== */
 
-import colors from 'ansi-colors';
-import { stub } from 'sinon';
-
-import fs from 'node:fs';
+import { fileURLToPath } from 'node:url';
+import fs from 'node:fs/promises';
 import path from 'node:path';
-import url from 'node:url';
 
-import writer from '../src/writer.mjs';
+import colors from 'ansi-colors';
 
-const __dirname = url.fileURLToPath(new URL('.', import.meta.url));
-const tmpDir = path.resolve(__dirname, '../tmp');
+import { writeOutputLog } from '../src/writer.mjs';
+
+const __dirname = fileURLToPath(new URL('../', import.meta.url));
 
 describe('Writer Function', () => {
-  test('writer should write to cwd if base dir is not specified', async () => {
-    stub(process, 'cwd').returns(tmpDir);
-    const reportFilePath = path.join(process.cwd(), 'foo.txt');
+  it('writer should creates a file', async () => {
+    const logFilePath = path.resolve(__dirname, 'foo.txt');
 
     expect.assertions(2);
 
     try {
-      await writer('footext', 'foo.txt');
+      await writeOutputLog(logFilePath, 'test content');
 
-      expect(fs.statSync(reportFilePath).isFile()).toBe(true);
-      expect(fs.readFileSync(reportFilePath, 'utf8')).toBe('footext');
+      expect((await fs.stat(logFilePath)).isFile()).toBe(true);
+      expect((await fs.readFile(logFilePath)).toString()).toBe('test content');
     } catch (e) {
-      throw new Error(`Failed to create report file: ${e.message}`);
+      throw new Error(`Failed to create log file: ${e.message}`);
     } finally {
-      process.cwd.restore();
-      fs.unlinkSync(reportFilePath);
-      fs.rmdirSync(tmpDir);
+      fs.unlink(logFilePath);
     }
   });
-  test('writer should write to a base folder if it is specified', async () => {
-    stub(process, 'cwd').returns(tmpDir);
-    const reportDirPath = path.join(process.cwd(), 'foodir');
-    const reportSubdirPath = path.join(reportDirPath, '/subdir');
-    const reportFilePath = path.join(reportSubdirPath, 'foo.txt');
+  it('writer should creates a directory if it does not exist', async () => {
+    const tmpDir = path.resolve(__dirname, 'tmp');
+    const logFilePath = path.join(tmpDir, 'foo.txt');
 
-    expect.assertions(2);
+    expect.assertions(3);
 
     try {
-      await writer('footext', 'foo.txt', `${tmpDir}/foodir/subdir`);
+      await writeOutputLog(logFilePath, 'test content');
 
-      expect(fs.statSync(reportFilePath).isFile()).toBe(true);
-      expect(fs.readFileSync(reportFilePath, 'utf8')).toBe('footext');
+      expect((await fs.stat(tmpDir)).isDirectory()).toBe(true);
+      expect((await fs.stat(logFilePath)).isFile()).toBe(true);
+      expect((await fs.readFile(logFilePath)).toString()).toBe('test content');
     } catch (e) {
-      throw new Error(`Failed to create report file: ${e.message}`);
+      throw new Error(`Failed to create log file: ${e.message}`);
     } finally {
-      process.cwd.restore();
-      fs.unlinkSync(reportFilePath);
-      fs.rmdirSync(reportSubdirPath);
-      fs.rmdirSync(reportDirPath);
-      fs.rmdirSync(tmpDir);
+      fs.rm(path.dirname(logFilePath), { recursive: true });
     }
   });
-  test('writer should strip colors from formatted output', async () => {
-    stub(process, 'cwd').returns(tmpDir);
-    const reportFilePath = path.join(process.cwd(), 'foo.txt');
+  it('writer should strip colors from formatted output', async () => {
+    const logFilePath = path.resolve(__dirname, 'foo.txt');
 
     expect.assertions(1);
 
     try {
-      await writer(colors.blue('footext'), 'foo.txt')
+      await writeOutputLog(logFilePath, colors.blue('test content'));
 
-      expect(fs.readFileSync(reportFilePath, 'utf8')).toBe('footext');
+      expect((await fs.readFile(logFilePath)).toString()).toBe('test content');
     } catch (e) {
-      throw new Error(`Failed to create report file: ${e.message}`);
+      throw new Error(`Failed to create log file: ${e.message}`);
     } finally {
-      process.cwd.restore();
-      fs.unlinkSync(reportFilePath);
-      fs.rmdirSync(tmpDir);
+      fs.unlink(logFilePath);
     }
   });
 });
