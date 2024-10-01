@@ -1,5 +1,5 @@
 /*!
- * Gulp Stylelint (v3.0.0-beta): src/stylish-formatter.mjs
+ * Gulp Stylelint (v3.0.0): src/stylish-formatter.mjs
  * Copyright (c) 2023-24 Adorade (https://github.com/adorade/gulp-stylelint-esm)
  * License under MIT
  * ========================================================================== */

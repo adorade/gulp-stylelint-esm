@@ -1,5 +1,5 @@
 /*!
- * Gulp Stylelint (v3.0.0-beta): test/index.test.js
+ * Gulp Stylelint (v3.0.0): test/index.test.js
  * Copyright (c) 2023-24 Adorade (https://github.com/adorade/gulp-stylelint-esm)
  * License under MIT
  * ========================================================================== */

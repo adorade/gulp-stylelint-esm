@@ -1,6 +1,6 @@
 {
   "name": "gulp-stylelint-esm",
-  "version": "3.0.0-beta",
+  "version": "3.0.0",
   "description": "Gulp plugin for stylelint with ES module support.",
   "author": {
     "name": "Adorade",
@@ -10,7 +10,7 @@
   "homepage": "https://github.com/adorade/gulp-stylelint-esm",
   "repository": {
     "type": "git",
-    "url": "https://github.com/adorade/gulp-stylelint-esm.git"
+    "url": "git+https://github.com/adorade/gulp-stylelint-esm.git"
   },
   "type": "module",
   "exports": {

@@ -1,5 +1,5 @@
 /*!
- * Gulp Stylelint (v3.0.0-beta): test/testutils/creatVinil.js
+ * Gulp Stylelint (v3.0.0): test/testutils/creatVinil.js
  * Copyright (c) 2023-24 Adorade (https://github.com/adorade/gulp-stylelint-esm)
  * License under MIT
  * ========================================================================== */

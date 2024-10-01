@@ -1,5 +1,5 @@
 /*!
- * Gulp Stylelint (v3.0.0-beta): test/testutils/cleanOutput.js
+ * Gulp Stylelint (v3.0.0): test/testutils/cleanOutput.js
  * Copyright (c) 2023-24 Adorade (https://github.com/adorade/gulp-stylelint-esm)
  * License under MIT
  * ========================================================================== */
