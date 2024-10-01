@@ -105,7 +105,7 @@ export default function gStylelintEsm(options) {
     });
 
     return pluginError;
-  }
+  };
 
   /**
    * Transforms the lint results into a single result object.
@@ -152,7 +152,7 @@ export default function gStylelintEsm(options) {
 
     // Return the transformed result as a single-element array
     return [combinedResult];
-  }
+  };
 
   /**
    * Passes lint results through user-defined reporters.
@@ -176,7 +176,7 @@ export default function gStylelintEsm(options) {
 
     // Return the original lint results after passing through reporters
     return lintResults;
-  }
+  };
 
   /**
    * Count of errors in lint results.
@@ -215,7 +215,7 @@ export default function gStylelintEsm(options) {
         message:  `Failed with ${errorCount} error${pl}`,
       });
     }
-  }
+  };
 
   /**
    * Creates a promise for linting a single file.
@@ -285,7 +285,7 @@ export default function gStylelintEsm(options) {
        */
       throw createPluginError(error);
     }
-  }
+  };
 
   /**
    * Handles each file in the stream, performs linting, and processes the results.
@@ -334,7 +334,7 @@ export default function gStylelintEsm(options) {
 
     // Don't push the file back to the stream yet
     done();
-  }
+  };
 
   /**
    * Handles the end of the stream, emitting errors if necessary.
@@ -391,7 +391,7 @@ export default function gStylelintEsm(options) {
        */
       throw createPluginError(error);
     }
-  }
+  };
 
   /**
    * Gulp transform stream for linting CSS files using stylelint.

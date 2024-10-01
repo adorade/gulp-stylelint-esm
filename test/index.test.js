@@ -63,7 +63,7 @@ describe('Plugin Functionality', () => {
         })
       );
 
-    expect(() => { stream }).not.toThrow();
+    expect(() => { stream; }).not.toThrow();
     done();
   });
   it('should throw an error when configuration is NOT set', async () => {

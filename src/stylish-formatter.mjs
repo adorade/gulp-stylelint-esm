@@ -89,7 +89,7 @@ export default function stylishFormatter(results, returnValue) {
 
       output += '\n';
     }
-  })
+  });
 
   // Ensure consistent padding
   output = output.trim();

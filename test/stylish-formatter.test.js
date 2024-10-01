@@ -30,7 +30,7 @@ describe('stylishFormatter', () => {
       },
     ];
 
-    const returnValue = { ruleMetadata: {} }
+    const returnValue = { ruleMetadata: {} };
 
     const output = stylishFormatter(results, returnValue);
 
@@ -39,7 +39,7 @@ describe('stylishFormatter', () => {
   it('should outputs no valid files', () => {
     const results = [];
 
-    const returnValue = { ruleMetadata: {} }
+    const returnValue = { ruleMetadata: {} };
 
     const output = stylishFormatter(results, returnValue);
 

@@ -55,7 +55,7 @@ describe('Writer Function', () => {
     expect.assertions(1);
 
     try {
-      await writeOutputLog(logFilePath, colors.blue('test content'))
+      await writeOutputLog(logFilePath, colors.blue('test content'));
 
       expect((await fs.readFile(logFilePath)).toString()).toBe('test content');
     } catch (e) {

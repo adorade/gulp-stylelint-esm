@@ -23,6 +23,15 @@ module.exports = {
   overrides: [
     {
       files: [
+        'src/*.mjs',
+        'test/*.test.js'
+      ],
+      rules: {
+        '@stylistic/js/semi': ['error', 'always'],
+      }
+    },
+    {
+      files: [
         'test/*.test.js',
         'test/*.spec.js',
         'bin/*.spec.js'
