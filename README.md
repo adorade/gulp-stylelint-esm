@@ -122,10 +122,13 @@ reporters: [
   formatter: stylish,
 
   // log the formatted result to console (optional):
-  console: true
+  console: true,
 
   // save the formatted result to a file (optional):
-  save: 'text-report.txt',
+  // - provide a path to the logs directory
+  // save: 'logs/stylelint-report.txt'
+  // - or save the report to root (default)
+  save: 'stylelint-report.txt'
 }
 ```
 
