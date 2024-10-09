@@ -41,6 +41,7 @@ module.exports = {
       },
       rules: {
         '@stylistic/js/arrow-parens': ['error', 'always'],
+        '@stylistic/js/comma-dangle': ['error', 'never'],
       }
     }
   ]
