@@ -29,7 +29,7 @@ describe('Plugin Functionality', () => {
   });
   it('should emit an error on streamed file', (done) => {
     const stream = src(fixtures('basic.css'), {
-      buffer: false,
+      buffer: false
     });
 
     stream
@@ -42,7 +42,7 @@ describe('Plugin Functionality', () => {
   });
   it('should not emit an error on buffered file', (done) => {
     const stream = src(fixtures('basic.css'), {
-      buffer: true,
+      buffer: true
     });
 
     stream
@@ -82,7 +82,7 @@ describe('Plugin Functionality', () => {
   it('should throw an error when linter complains', async () => {
     const stream = gStylelintEsm({
       config: { rules: { 'color-hex-length': 'short' } },
-      reporters: [],
+      reporters: []
     });
 
     const file = createVinylFile('invalid.css', '.foo { color: #ffffff; }');
@@ -132,7 +132,7 @@ describe('Plugin Functionality', () => {
         stream
           .pipe(gStylelintEsm({
             config: { rules: { 'color-hex-length': 'short' } },
-            fix: true,
+            fix: true
           }))
           .on('error', reject)
           .on('finish', resolve);
@@ -172,7 +172,7 @@ describe('Plugin Functionality', () => {
         stream
           .pipe(gStylelintEsm({
             config: { rules: { 'color-hex-length': 'short' } },
-            fix: true,
+            fix: true
           }))
           .on('error', reject)
           .pipe(dest(outputDir))

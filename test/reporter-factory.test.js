@@ -24,13 +24,13 @@ describe('Reporter Functionality', () => {
     const reporter = reporterFactory({
       formatter() {
         // empty formatter
-      },
+      }
     });
 
     expect(typeof reporter({}).then).toBe('function');
   });
 });
-describe('Reporter Behavior with console', () => {
+describe('Reporter behavior with console', () => {
   it('reporter should write to console when console param is true', () => {
     stub(process.stdout, 'write');
     const reporter = reporterFactory({
@@ -61,7 +61,7 @@ describe('Reporter Behavior with console', () => {
     stub(process.stdout, 'write');
     const reporter = reporterFactory({
       formatter() { return '  \n'; },
-      console: true,
+      console: true
     });
 
     reporter({});
@@ -73,7 +73,7 @@ describe('Reporter Behavior with console', () => {
   it('reporter should NOT write to console when console param is undefined', () => {
     stub(process.stdout, 'write');
     const reporter = reporterFactory({
-      formatter() { return 'foo'; },
+      formatter() { return 'foo'; }
     });
 
     reporter({});
@@ -83,13 +83,13 @@ describe('Reporter Behavior with console', () => {
     process.stdout.write.restore();
   });
 });
-describe('Reporter Behavior with log file', () => {
+describe('Reporter behavior with log file', () => {
   it('reporter should writes a file when formatter returns a string', async () => {
     const logFilePath = path.resolve(__dirname, 'foo.txt');
 
     const reporter = reporterFactory({
       formatter() { return 'test content'; },
-      log: logFilePath,
+      log: logFilePath
     });
 
     await reporter({});
@@ -105,7 +105,7 @@ describe('Reporter Behavior with log file', () => {
 
     const reporter = reporterFactory({
       formatter() { return 'test content'; },
-      log: logFilePath,
+      log: logFilePath
     });
 
     await reporter({});
@@ -121,7 +121,7 @@ describe('Reporter Behavior with log file', () => {
 
     const reporter = reporterFactory({
       formatter() { return ''; },
-      log: logFilePath,
+      log: logFilePath
     });
 
     await reporter({});
@@ -135,7 +135,7 @@ describe('Reporter Behavior with log file', () => {
     const logFilePath = path.resolve(__dirname, 'foo.txt');
 
     const reporter = reporterFactory({
-      formatter() { return 'foo'; },
+      formatter() { return 'foo'; }
     });
 
     await reporter({});

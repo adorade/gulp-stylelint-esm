@@ -79,7 +79,7 @@ describe('Fail after error', () => {
       await new Promise((resolve, reject) => {
         stream
           .pipe(gStylelintEsm({
-            config: { rules: { 'color-hex-length': 'short' } },
+            config: { rules: { 'color-hex-length': 'short' } }
           }))
           .on('error', (error) => {
             errorEmitted = true;
@@ -104,7 +104,7 @@ describe('Fail after error', () => {
         stream
           .pipe(gStylelintEsm({
             failAfterError: true,
-            config: { rules: { 'color-hex-length': 'short' } },
+            config: { rules: { 'color-hex-length': 'short' } }
           }))
           .on('error', (error) => {
             errorEmitted = true;
