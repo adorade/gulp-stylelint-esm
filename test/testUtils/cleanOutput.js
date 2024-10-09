@@ -16,8 +16,10 @@ symbolConversions.set('✖', '×');
 symbolConversions.set('♻', 'o');
 
 /**
- * @param {string} output
- * @returns {string}
+ * Cleans and transforms the output string by removing ANSI styling and replacing certain symbols.
+ *
+ * @param {string} output - The original output string to be cleaned.
+ * @returns {string} The cleaned and transformed output string.
  */
 function getCleanOutput(output) {
   let cleanOutput = unstyle(output).trim();
@@ -30,10 +32,12 @@ function getCleanOutput(output) {
 }
 
 /**
- * @param {import('stylelint').Formatter} formatter
- * @param {import('stylelint').LintResult[]} results
- * @param {Pick<import('stylelint').LinterResult, 'ruleMetadata'>} [returnValue]
- * @returns {string}
+ * Cleans and formats the output of a Stylelint formatter.
+ *
+ * @param {import('stylelint').Formatter} formatter - The Stylelint formatter function to be used.
+ * @param {import('stylelint').LintResult[]} results - An array of Stylelint lint results to be formatted.
+ * @param {Pick<import('stylelint').LinterResult, 'ruleMetadata'>} [returnValue={ ruleMetadata: {} }] - Optional return value with rule metadata.
+ * @returns {string} The cleaned and formatted output string.
  */
 export function cleanFormatterOutput(formatter, results, returnValue = { ruleMetadata: {} }) {
   return getCleanOutput(formatter(results, returnValue));
