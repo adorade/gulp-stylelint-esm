@@ -38,7 +38,7 @@ export default function reporterFactory(config = {}) {
      * The formatter to be used for formatting results.
      * @type {Formatter}
      */
-    let formatter = config.formatter || 'string';
+    let formatter = config.formatter;
 
     if (typeof formatter === 'string') {
       if (formatter === 'stylish') {
@@ -48,7 +48,9 @@ export default function reporterFactory(config = {}) {
       } else {
         const buildFormatter = 'stylish, compact, github, json, string, tap, unix, verbose';
 
-        throw new Error(`Invalid formatter: ${reporter.formatter}. Use one of: "${buildFormatter}"`);
+        throw new Error(
+          `Invalid formatter: "${config.formatter}". Use one of: "${buildFormatter}" or a function.`
+        );
       }
     }
 
