@@ -30,6 +30,75 @@ describe('Reporter Functionality', () => {
     expect(typeof reporter({}).then).toBe('function');
   });
 });
+describe('Reporter behavior with formatter', () => {
+  it('should correctly set formatter to stylishFormatter when "stylish" string is provided', async () => {
+    const config = { formatter: 'stylish' };
+    const reporter = reporterFactory(config);
+    const result = { results: [] };
+
+    await reporter(result);
+
+    expect(config.formatter).toBe('stylish');
+  });
+  it('should throw an error when formatter is set to an invalid string not in the predefined list', () => {
+    const validFormatter = 'stylish, compact, github, json, string, tap, unix, verbose';
+    const config = { formatter: 'invalid-formatter' };
+    const reporter = reporterFactory(config);
+
+    expect(() => reporter({})).rejects.toThrow(
+      `Invalid formatter: "${config.formatter}". Use one of: "${validFormatter}" or a function.`
+    );
+  });
+  it('should correctly set formatter to the appropriate function when a valid formatter string (other than "stylish") is provided', async () => {
+    const validFormatter = 'json';
+    const config = { formatter: validFormatter };
+    const reporter = reporterFactory(config);
+    const result = { results: [] };
+
+    await reporter(result);
+
+    expect(config.formatter).toBe(validFormatter);
+    expect(typeof config.formatter).toBe('string');
+  });
+  it('should throw an error for case-sensitive formatter string', () => {
+    const config = { formatter: 'StYlIsH' };
+    const reporter = reporterFactory(config);
+
+    expect(() => reporter({})).rejects.toThrow(`Invalid formatter: "${config.formatter}".`);
+  });
+  it('should maintain the original config object structure after setting the formatter', async () => {
+    const originalConfig = {
+      formatter: 'stylish',
+      console: true,
+      log: 'output.txt'
+    };
+    const reporter = reporterFactory(originalConfig);
+    const result = { results: [] };
+
+    await reporter(result);
+
+    expect(originalConfig).toEqual({
+      formatter: 'stylish',
+      console: true,
+      log: 'output.txt'
+    });
+    expect(typeof originalConfig.formatter).toBe('string');
+
+    await fs.unlink(originalConfig.log);
+  });
+  it('should handle a custom formatter function that returns a Promise', async () => {
+    const customFormatter = () => 'custom formatted result';
+    const config = { formatter: customFormatter };
+    const reporter = reporterFactory(config);
+    const result = { results: [] };
+
+    await reporter(result);
+
+    expect(config.formatter).toBe(customFormatter);
+    expect(typeof config.formatter).toBe('function');
+    expect(config.formatter()).toBe('custom formatted result');
+  });
+});
 describe('Reporter behavior with console', () => {
   it('reporter should write to console when console param is true', () => {
     stub(process.stdout, 'write');
