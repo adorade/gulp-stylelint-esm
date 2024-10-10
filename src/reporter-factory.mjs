@@ -34,8 +34,6 @@ export default function reporterFactory(config = {}) {
    * @returns {Promise<void[]>}
    */
   async function reporter(result) {
-    // console.log('reporter', result.results);
-
     /**
      * The formatter to be used for formatting results.
      * @type {Formatter}
