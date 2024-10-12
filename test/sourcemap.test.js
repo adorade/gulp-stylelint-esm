@@ -12,6 +12,7 @@ import gulpConcat from 'gulp-concat';
 import path from 'node:path';
 import url from 'node:url';
 
+import applySourcemap from '../src/apply-sourcemap.mjs';
 import gStylelintEsm from '../src/index.mjs';
 
 const __dirname = url.fileURLToPath(new URL('.', import.meta.url));
@@ -110,5 +111,35 @@ describe('Sourcemap Handling', () => {
     } catch (error) {
       expect(error.message).toBe('Failed with 2 errors');
     }
+  });
+
+  it('should maintain the original lintResult if sourcemap application fails', async () => {
+    const file = {
+      sourceMap: {
+        mappings: 'AAAA,SAAS,CAAC',
+        sources: ['test.css'],
+        sourcesContent: ['body { color: red; }'],
+        version: 3,
+        file: 'test.css',
+        names: []
+      },
+      contents: Buffer.from('body { color: red; }'),
+      path: 'test.css'
+    };
+
+    const originalLintResult = {
+      results: [{
+        warnings: [{ line: 1, column: 1, rule: 'color-no-invalid-hex' }],
+        source: 'test.css'
+      }]
+    };
+
+    let resultLintResult;
+
+    if (file.sourceMap && file.sourceMap.mappings) {
+      resultLintResult = await applySourcemap(originalLintResult, file.sourceMap);
+    }
+
+    expect(resultLintResult).toEqual(originalLintResult);
   });
 });
