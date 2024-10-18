@@ -58,7 +58,7 @@
     "@babel/eslint-parser": "7.25.1",
     "@babel/preset-env": "7.25.4",
     "babel-jest": "29.7.0",
-    "eslint": "8.57.0",
+    "eslint": "9.13.0",
     "eslint-config-stylelint": "22.0.0",
     "gulp": "5.0.0",
     "gulp-clean-css": "4.3.0",
