@@ -28,6 +28,11 @@ jobs:
           node-version: ${{ matrix.node }}
           cache: yarn
 
+      - name: Enable Corepack and set Yarn to latest
+        run: |
+          corepack enable
+          corepack prepare yarn@stable --activate
+
       - name: Install dependencies
         run: yarn
 
