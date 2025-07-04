@@ -37,9 +37,9 @@
   "scripts": {
     "lint": "eslint {src,test}/**/*.{mjs,js}",
     "lint:fix": "eslint {src,test}/**/*.{mjs,js} --fix",
-    "jest": "node --experimental-vm-modules --no-warnings node_modules/jest/bin/jest.js -i",
-    "jest:coverage": "yarn run jest --coverage",
-    "test": "yarn run lint && yarn run jest",
+    "jest:bin": "node --experimental-vm-modules --no-warnings $(yarn bin jest) -i",
+    "jest:coverage": "yarn jest:bin --coverage",
+    "test": "yarn lint && yarn jest:bin",
     "prepublishOnly": "yarn test"
   },
   "peerDependencies": {
@@ -73,5 +73,6 @@
   "engines": {
     "node": ">=18.12.0"
   },
-  "license": "MIT"
+  "license": "MIT",
+  "packageManager": "yarn@4.9.2"
 }
