@@ -1,38 +1,60 @@
 {
   "extends": [
-    "config:base",
+    "config:recommended",
     ":dependencyDashboardApproval",
     "schedule:earlyMondays",
     ":assignAndReview(adorade)",
     ":maintainLockFilesMonthly"
   ],
   "timezone": "Europe/Bucharest",
-  "labels": ["deps"],
+  "labels": [
+    "deps"
+  ],
   "packageRules": [
     {
-      "matchPackagePatterns": ["^@babel/"],
       "groupName": "babel packages",
-      "labels": ["build"]
+      "labels": [
+        "build"
+      ],
+      "matchPackageNames": [
+        "/^@babel//"
+      ]
     },
     {
-      "matchPackagePatterns": ["^eslint"],
       "groupName": "eslint packages",
-      "labels": ["lint"]
+      "labels": [
+        "lint"
+      ],
+      "matchPackageNames": [
+        "/^eslint/"
+      ]
     },
     {
-      "matchPackagePatterns": ["^stylelint"],
       "groupName": "stylelint packages",
-      "labels": ["lint"]
+      "labels": [
+        "lint"
+      ],
+      "matchPackageNames": [
+        "/^stylelint/"
+      ]
     },
     {
-      "matchPackagePatterns": ["^jest|^sinon"],
       "groupName": "test packages",
-      "labels": ["test"]
+      "labels": [
+        "test"
+      ],
+      "matchPackageNames": [
+        "/^jest|^sinon/"
+      ]
     },
     {
-      "matchPackagePatterns": ["^gulp"],
       "groupName": "gulp packages",
-      "labels": ["gulp"]
+      "labels": [
+        "gulp"
+      ],
+      "matchPackageNames": [
+        "/^gulp/"
+      ]
     }
   ]
 }
