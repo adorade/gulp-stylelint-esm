@@ -40,12 +40,12 @@ describe('Reporter behavior with formatter', () => {
 
     expect(config.formatter).toBe('stylish');
   });
-  it('should throw an error when formatter is set to an invalid string not in the predefined list', () => {
+  it('should throw an error when formatter is set to an invalid string not in the predefined list', async () => {
     const validFormatter = 'stylish, compact, github, json, string, tap, unix, verbose';
     const config = { formatter: 'invalid-formatter' };
     const reporter = reporterFactory(config);
 
-    expect(() => reporter({})).rejects.toThrow(
+    await expect(() => reporter({})).rejects.toThrow(
       `Invalid formatter: "${config.formatter}". Use one of: "${validFormatter}" or a function.`
     );
   });
@@ -60,11 +60,11 @@ describe('Reporter behavior with formatter', () => {
     expect(config.formatter).toBe(validFormatter);
     expect(typeof config.formatter).toBe('string');
   });
-  it('should throw an error for case-sensitive formatter string', () => {
+  it('should throw an error for case-sensitive formatter string', async () => {
     const config = { formatter: 'StYlIsH' };
     const reporter = reporterFactory(config);
 
-    expect(() => reporter({})).rejects.toThrow(`Invalid formatter: "${config.formatter}".`);
+    await expect(() => reporter({})).rejects.toThrow(`Invalid formatter: "${config.formatter}".`);
   });
   it('should maintain the original config object structure after setting the formatter', async () => {
     const originalConfig = {

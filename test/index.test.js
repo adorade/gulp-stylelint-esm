@@ -23,48 +23,56 @@ function fixtures(glob) {
 }
 
 describe('Plugin Functionality', () => {
-  it('should not throw when no arguments are passed', (done) => {
-    expect(() => { gStylelintEsm(); }).not.toThrow();
-    done();
-  });
-  it('should emit an error on streamed file', (done) => {
-    const stream = src(fixtures('basic.css'), {
-      buffer: false
+  it('should not throw when no arguments are passed', () => {
+    return new Promise((done) => {
+      expect(() => { gStylelintEsm(); }).not.toThrow();
+      done();
     });
-
-    stream
-      .pipe(gStylelintEsm())
-      .on('error', (error) => {
-        expect(error.message).toBe('Streaming is not supported');
+  });
+  it('should emit an error on streamed file', () => {
+    return new Promise((done) => {
+      const stream = src(fixtures('basic.css'), {
+        buffer: false
       });
 
-    done();
-  });
-  it('should not emit an error on buffered file', (done) => {
-    const stream = src(fixtures('basic.css'), {
-      buffer: true
-    });
+      stream
+        .pipe(gStylelintEsm())
+        .on('error', (error) => {
+          expect(error.message).toBe('Streaming is not supported');
+        });
 
-    stream
-      .pipe(gStylelintEsm({
-        config: { rules: {} }
-      }))
-      .on('error', (error) => {
-        expect(error).toBe(undefined);
+      done();
+    });
+  });
+  it('should not emit an error on buffered file', () => {
+    return new Promise((done) => {
+      const stream = src(fixtures('basic.css'), {
+        buffer: true
       });
 
-    done();
-  });
-  it('should NOT throw an error when configuration is set', (done) => {
-    const stream = src(fixtures('basic.css'))
-      .pipe(
-        gStylelintEsm({
+      stream
+        .pipe(gStylelintEsm({
           config: { rules: {} }
-        })
-      );
+        }))
+        .on('error', (error) => {
+          expect(error).toBeUndefined();
+        });
 
-    expect(() => { stream; }).not.toThrow();
-    done();
+      done();
+    });
+  });
+  it('should NOT throw an error when configuration is set', () => {
+    return new Promise((done) => {
+      const stream = src(fixtures('basic.css'))
+        .pipe(
+          gStylelintEsm({
+            config: { rules: {} }
+          })
+        );
+
+      expect(() => { stream; }).not.toThrow();
+      done();
+    });
   });
   it('should throw an error when configuration is NOT set', async () => {
     const stream = gStylelintEsm();
@@ -97,6 +105,7 @@ describe('Plugin Functionality', () => {
   });
   it('should ignore file', async () => {
     const stream = src([fixtures('basic.css'), fixtures('invalid.css')]);
+    let errorEmitted = false;
 
     try {
       await new Promise((resolve, reject) => {
@@ -105,9 +114,14 @@ describe('Plugin Functionality', () => {
             config: { rules: { 'color-hex-length': 'short' } },
             ignorePath: fixtures('ignore')
           }))
-          .on('finish', resolve)
-          .on('error', reject);
+          .on('error', (error) => {
+            errorEmitted = true;
+            reject(error);
+          })
+          .on('finish', resolve);
       });
+      // Assert that no error was emitted (file was ignored)
+      expect(errorEmitted).toBe(false);
     } catch (error) {
       throw new Error(`Unexpected error: ${error}`);
     }

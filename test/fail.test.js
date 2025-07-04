@@ -28,7 +28,7 @@ describe('Fail after error', () => {
           reporters: []
         }))
         .on('error', (error) => {
-          expect(error).toBe(undefined);
+          expect(error).toBeUndefined();
           resolve;
         })
         .on('finish', resolve);
@@ -45,7 +45,7 @@ describe('Fail after error', () => {
           reporters: []
         }))
         .on('error', (error) => {
-          expect(error).toBe(undefined);
+          expect(error).toBeUndefined();
           resolve;
         })
         .on('finish', resolve);
@@ -62,13 +62,14 @@ describe('Fail after error', () => {
           reporters: []
         }))
         .on('error', (error) => {
-          expect(error).toBe(undefined);
+          expect(error).toBeUndefined();
           resolve;
         })
         .on('finish', resolve);
     });
   });
 
+  /* eslint-disable */
   xit('should FAIL after emitting an error if `failAfterError` is not configured', async () => {
     const stream = src(fixtures('invalid.css'));
     let errorEmitted = false;
@@ -118,6 +119,7 @@ describe('Fail after error', () => {
 
     expect(errorEmitted).toBe(true);
   });
+  /* eslint-enable */
 
   it('should NOT FAIL after emitting an error if `failAfterError` is set to false', async () => {
     const stream = src(fixtures('invalid.css'));

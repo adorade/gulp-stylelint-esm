@@ -22,20 +22,31 @@ function fixtures(glob) {
 }
 
 describe('Sourcemap Handling', () => {
-  it('should emit no errors when stylelint rules are satisfied', (done) => {
-    const stream = src(fixtures('original-*.css'), {
-        sourcemaps: true
-      })
-      .pipe(gStylelintEsm({
-        config: { rules: {} },
-        reporters: []
-      }));
+  it('should emit no errors when stylelint rules are satisfied', () => {
+    return new Promise((done) => {
+      const stream = src(fixtures('original-*.css'), {
+          sourcemaps: true
+        })
+        .pipe(gStylelintEsm({
+          config: { rules: {} },
+          reporters: []
+        }));
 
-    stream.on('finish', () => {
-      done();
+      let errorEmitted = false;
+
+      stream.on('error', (err) => {
+        errorEmitted = true;
+        done(err);
+      });
+
+      stream.on('finish', () => {
+        expect(errorEmitted).toBe(false);
+        done();
+      });
     });
   });
 
+  /* eslint-disable */
   xit('should apply sourcemaps correctly when using a custom sourcemap file', async () => {
     const stream = src(fixtures('original-*.css'), { sourcemaps: true });
 
@@ -112,6 +123,7 @@ describe('Sourcemap Handling', () => {
       expect(error.message).toBe('Failed with 2 errors');
     }
   });
+  /* eslint-enable */
 
   it('should maintain the original lintResult if sourcemap application fails', async () => {
     const file = {
