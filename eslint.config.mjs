@@ -2,6 +2,8 @@
  * Gulp Stylelint (v3.0.0): eslint.config.mjs
  * Copyright (c) 2023-24 Adorade (https://github.com/adorade/gulp-stylelint-esm)
  * License under MIT
+ *
+ * https://eslint.org/docs/latest/use/configure/configuration-files
  * ========================================================================== */
 
 import { defineConfig } from "eslint/config";
