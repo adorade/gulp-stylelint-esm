@@ -34,7 +34,7 @@ jobs:
           cache: yarn
 
       - name: Install dependencies
-        run: yarn
+        run: rm -rf node_modules && yarn install --frozen-lockfile
 
       - name: Test
         run: yarn run test
