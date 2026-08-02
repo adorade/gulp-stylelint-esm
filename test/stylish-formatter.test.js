@@ -1,8 +1,8 @@
 /*!
- * Gulp Stylelint (v3.0.0): test/stylish-formatter.test.js
- * Copyright (c) 2023-24 Adorade (https://github.com/adorade/gulp-stylelint-esm)
+ * Gulp Stylelint (v4.0.0): test/stylish-formatter.test.js
+ * Copyright (c) 2023-26 Adorade (https://github.com/adorade/gulp-stylelint-esm)
  * License under MIT
- * ========================================================================== */
+ * ========================================================================= */
 
 import { sep } from 'node:path';
 import stylishFormatter from '../src/stylish-formatter.mjs';
