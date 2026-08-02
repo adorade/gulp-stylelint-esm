@@ -43,7 +43,7 @@
     "prepublishOnly": "yarn test"
   },
   "peerDependencies": {
-    "stylelint": "16"
+    "stylelint": "16 || 17"
   },
   "dependencies": {
     "@adorade/plugin-error": "2.0.1",
