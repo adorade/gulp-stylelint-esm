@@ -54,9 +54,9 @@
     "write-file-atomic": "6.0.0"
   },
   "devDependencies": {
-    "@babel/core": "7.29.7",
-    "@babel/eslint-parser": "7.29.7",
-    "@babel/preset-env": "7.29.7",
+    "@babel/core": "8.0.1",
+    "@babel/eslint-parser": "8.0.1",
+    "@babel/preset-env": "8.0.2",
     "babel-jest": "30.4.1",
     "eslint": "9.39.5",
     "eslint-config-stylelint": "25.0.1",
