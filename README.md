@@ -15,7 +15,8 @@ A [Gulp](https://gulpjs.com/) plugin that runs [stylelint](https://github.com/st
 
 > [!NOTE]
 > **REQUIREMENTS**:
-> Supports **gulp v4 and v5**, **stylelint > 16** and **node >= 18.12.0**.
+> Supports **gulp v4 and v5**, **stylelint > 17** and **node > 22.22.2**.
+> It might work with **stylelint 16** too, but without the `github` formatter
 
 ```sh
 # YARN
@@ -42,7 +43,7 @@ function lintCssTask() {
 
 Below is the list of currently available **stylelint formatters**. Some of them are bundled with stylelint by default and exposed on `gStylelintEsm.formatters` object. Others need to be installed. You can [write a custom formatter](http://stylelint.io/developer-guide/formatters/) to tailor the reporting to your needs.
 
-Formatters bundled with stylelint: `"compact", "github", "json", "string", "tap", "unix", "verbose"`.
+Formatters bundled with stylelint: `"compact", "json", "string", "tap", "unix", "verbose"`.
 
 The plugin comes with a built-in formatter called `"stylish"`, which is set as the **default**.
 
@@ -68,8 +69,8 @@ function lintCssTask() {
       fix: false,           // false (default) | true
       reporters: [
         { formatter: 'stylish', console: true }, // default
-        { formatter: 'json', save: 'report.json' },
-        { formatter: myStylelintFormatter, save: 'my-custom-report.txt' }
+        { formatter: 'json', log: 'report.json' },
+        { formatter: myStylelintFormatter, log: 'my-custom-report.txt' }
       ],
       debug: false          // false (default) | true
     }));
@@ -118,7 +119,7 @@ reporters: [
   // - pass a built-in formatter
   // - pass a function for imported, custom or exposed formatters
   // - pass a string for formatters bundled with stylelint
-  //   "stylish (default)", "string", "compact", "github", "json", "tap", "unix", "verbose"
+  //   "stylish (default)", "string", "compact", "json", "tap", "unix", "verbose"
   formatter: stylish,
 
   // log the formatted result to console (optional):
@@ -128,7 +129,7 @@ reporters: [
   // - provide a path to the logs directory
   // save: 'logs/stylelint-report.txt'
   // - or save the report to root (default)
-  save: 'stylelint-report.txt'
+  log: 'stylelint-report.txt'
 }
 ```
 
