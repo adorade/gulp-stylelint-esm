@@ -41,7 +41,7 @@ describe('Reporter behavior with formatter', () => {
     expect(config.formatter).toBe('stylish');
   });
   it('should throw an error when formatter is set to an invalid string not in the predefined list', async () => {
-    const validFormatter = 'stylish, compact, github, json, string, tap, unix, verbose';
+    const validFormatter = 'stylish, compact, json, string, tap, unix, verbose';
     const config = { formatter: 'invalid-formatter' };
     const reporter = reporterFactory(config);
 

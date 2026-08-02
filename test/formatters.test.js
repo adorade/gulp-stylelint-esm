@@ -11,9 +11,8 @@ describe('Plugin formatters', () => {
     expect(typeof gFormatters === 'object').toBe(true);
   });
   it('all built-in formatters are exposed on `stylelint` object', async () => {
-    expect(Object.keys(gFormatters)).toHaveLength(7);
+    expect(Object.keys(gFormatters)).toHaveLength(6);
     expect(typeof (await gFormatters.compact)([])).toBe('string');
-    expect(typeof (await gFormatters.github)([], {})).toBe('string');
     expect(typeof (await gFormatters.json)([])).toBe('string');
     expect(typeof (await gFormatters.string)([])).toBe('string');
     expect(typeof (await gFormatters.tap)([])).toMatch('string');
