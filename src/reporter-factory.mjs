@@ -46,7 +46,7 @@ export default function reporterFactory(config = {}) {
       } else if (formatter in gFormatters) {
         formatter = await gFormatters[formatter];
       } else {
-        const buildFormatter = 'stylish, compact, github, json, string, tap, unix, verbose';
+        const buildFormatter = 'stylish, compact, json, string, tap, unix, verbose';
 
         throw new Error(
           `Invalid formatter: "${config.formatter}". Use one of: "${buildFormatter}" or a function.`
