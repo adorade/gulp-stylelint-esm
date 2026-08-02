@@ -67,7 +67,7 @@
     "jest": "30.1.3",
     "sinon": "21.0.0",
     "stylelint": "16.24.0",
-    "typescript": "5.9.2",
+    "typescript": "5.9.3",
     "vinyl": "3.0.1"
   },
   "engines": {
