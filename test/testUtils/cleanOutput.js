@@ -1,8 +1,8 @@
 /*!
- * Gulp Stylelint (v3.0.0): test/testutils/cleanOutput.js
- * Copyright (c) 2023-24 Adorade (https://github.com/adorade/gulp-stylelint-esm)
+ * Gulp Stylelint (v4.0.0): test/testutils/cleanOutput.js
+ * Copyright (c) 2023-26 Adorade (https://github.com/adorade/gulp-stylelint-esm)
  * License under MIT
- * ========================================================================== */
+ * ========================================================================= */
 
 import colors from 'ansi-colors';
 const { unstyle } = colors;
