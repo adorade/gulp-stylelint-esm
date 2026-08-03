@@ -5,6 +5,22 @@ on:
     branches: [main, develop]
   pull_request:
     branches: [main]
+  # --- Uncomment to run manually
+  # workflow_dispatch:
+  #   inputs:
+  #     reason:
+  #       description: "Optional reason for manual run"
+  #       required: false
+  # --- Uncomment to schedule
+  # schedule:
+  #         # ┌───────────── minute (0 - 59)
+  #         # │ ┌───────────── hour (0 - 23)
+  #         # │ │ ┌───────────── day of the month (1 - 31)
+  #         # │ │ │ ┌───────────── month (1 - 12 or JAN-DEC)
+  #         # │ │ │ │ ┌───────────── day of the week (0 - 6 or SUN-SAT)
+  #         # │ │ │ │ │
+  #         # * * * * *
+  #   - cron: 0 9 * * SAT
 
 jobs:
   test:
@@ -14,7 +30,8 @@ jobs:
       fail-fast: false
       matrix:
         os: [ubuntu-latest]
-        node: [22]
+        node: [22, 24]
+        # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
 
     runs-on: ${{ matrix.os }}
 
