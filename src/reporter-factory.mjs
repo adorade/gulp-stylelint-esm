@@ -1,5 +1,5 @@
 /*!
- * Gulp Stylelint (v4.0.0): src/reporter-factory.mjs
+ * Gulp Stylelint (v4.1.0): src/reporter-factory.mjs
  * Copyright (c) 2023-26 Adorade (https://github.com/adorade/gulp-stylelint-esm)
  * License under MIT
  * ========================================================================= */

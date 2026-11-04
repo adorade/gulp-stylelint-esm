@@ -1,5 +1,5 @@
 /*!
- * Gulp Stylelint (v4.0.0): test/sourcemap.test.js
+ * Gulp Stylelint (v4.1.0): test/sourcemap.test.js
  * Copyright (c) 2023-26 Adorade (https://github.com/adorade/gulp-stylelint-esm)
  * License under MIT
  * ========================================================================= */
