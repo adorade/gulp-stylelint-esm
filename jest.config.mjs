@@ -33,7 +33,7 @@ const config =  {
   //   enableGlobally: true,
   // },
   transform: {
-    "\\.mjs?$": "babel-jest"
+    "\\.mjs?$": ["babel-jest", { configFile: "./babel.conf.mjs" }]
   },
   roots: ["test"],
   testRegex: ".*\\.test\\.js$"

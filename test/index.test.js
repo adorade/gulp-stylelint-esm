@@ -123,7 +123,7 @@ describe('Plugin Functionality', () => {
       // Assert that no error was emitted (file was ignored)
       expect(errorEmitted).toBe(false);
     } catch (error) {
-      throw new Error(`Unexpected error: ${error}`);
+      throw new Error(`Unexpected error: ${error}`, { cause: error });
     }
   });
   it('should overwrite the source file when `fix` option is set', async () => {
@@ -156,7 +156,7 @@ describe('Plugin Functionality', () => {
 
       expect(outputFileContents).toBe('.foo {\n  color: #fff;\n}\n');
     } catch (error) {
-      throw new Error(`Unexpected error: ${error}`);
+      throw new Error(`Unexpected error: ${error}`, { cause: error });
     } finally {
       fs.unlinkSync(outputFilePath);
       fs.rmdirSync(outputDir);
@@ -197,7 +197,7 @@ describe('Plugin Functionality', () => {
 
       expect(outputFileContents).toBe('.foo {\n  color: #fff;\n}\n');
     } catch (error) {
-      throw new Error(`Unexpected error: ${error}`);
+      throw new Error(`Unexpected error: ${error}`, { cause: error });
     } finally {
       fs.unlinkSync(inputFilePath);
       fs.unlinkSync(outputFilePath);

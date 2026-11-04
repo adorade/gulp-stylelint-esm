@@ -83,7 +83,7 @@ export default function gStylelintEsm(options) {
    * List to store lint promises for each file.
    * @type {Promise<LinterResult>[]}
    */
-  let lintPromiseList = [];
+  const lintPromiseList = [];
   let hasErrors = false;    // Track whether any errors occur
   const files = [];         // Track all files for gulp
 

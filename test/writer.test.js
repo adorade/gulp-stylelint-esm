@@ -26,7 +26,7 @@ describe('Writer Function', () => {
       expect((await fs.stat(logFilePath)).isFile()).toBe(true);
       expect((await fs.readFile(logFilePath)).toString()).toBe('test content');
     } catch (e) {
-      throw new Error(`Failed to create log file: ${e.message}`);
+      throw new Error(`Failed to create log file: ${e.message}`, { cause: e });
     } finally {
       fs.unlink(logFilePath);
     }
@@ -44,7 +44,7 @@ describe('Writer Function', () => {
       expect((await fs.stat(logFilePath)).isFile()).toBe(true);
       expect((await fs.readFile(logFilePath)).toString()).toBe('test content');
     } catch (e) {
-      throw new Error(`Failed to create log file: ${e.message}`);
+      throw new Error(`Failed to create log file: ${e.message}`, { cause: e });
     } finally {
       fs.rm(path.dirname(logFilePath), { recursive: true });
     }
@@ -59,7 +59,7 @@ describe('Writer Function', () => {
 
       expect((await fs.readFile(logFilePath)).toString()).toBe('test content');
     } catch (e) {
-      throw new Error(`Failed to create log file: ${e.message}`);
+      throw new Error(`Failed to create log file: ${e.message}`, { cause: e });
     } finally {
       fs.unlink(logFilePath);
     }
